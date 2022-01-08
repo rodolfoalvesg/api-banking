@@ -1,10 +1,11 @@
 package main
 
 import (
-	"api/src/router"
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/rodolfoalvesg/api-banking/api/src/router"
 )
 
 func main() {

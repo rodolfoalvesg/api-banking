@@ -1,7 +1,7 @@
 package router
 
 import (
-	"api/src/router/routers"
+	"github.com/rodolfoalvesg/api-banking/api/src/router/routers"
 
 	"github.com/gorilla/mux"
 )

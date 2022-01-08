@@ -1,8 +1,9 @@
 package routers
 
 import (
-	"api/src/controllers"
 	"net/http"
+
+	"github.com/rodolfoalvesg/api-banking/api/src/controllers"
 )
 
 var loginRouter = Router{
