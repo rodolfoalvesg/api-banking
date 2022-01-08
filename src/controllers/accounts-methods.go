@@ -3,9 +3,11 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/src/db"
 	"github.com/rodolfoalvesg/api-banking/api/src/models"
 	"github.com/rodolfoalvesg/api-banking/api/src/responses"
@@ -28,7 +30,7 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	account.FormatDocumentNumber() // FormatDocumentNumber formata os valores do cpf tirando caractees
+	account.FormatDocumentNumber() //FormatDocumentNumber formata os valores do cpf tirando caractees
 	if account.Cpf == "" || len(account.Cpf) > 11 {
 		responses.RespondError(w, http.StatusBadRequest, errors.New("O número do documento deve possuir 11 caracteres"))
 		return
@@ -36,7 +38,7 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	passwdHash, err := security.SecurityHash(account.Secret) // Cria um hash da senha passada
+	passwdHash, err := security.SecurityHash(account.Secret) //Cria um hash da senha passada
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
@@ -44,14 +46,23 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	account.Secret = string(passwdHash) //account.Secret, atribui ao campo de senha do modelo o HASH
 	account.Id = uuid.New().String()    //account.Id, cria um id único e atribui ao campo Id
 
-	db.CreatedAccount(account) // db.CreatedAccount, insere os dados na Base de dados
+	db.CreatedAccount(account) //db.CreatedAccount, insere os dados na Base de dados
 
 	responses.RespondJSON(w, http.StatusOK, db.BaseAccounts)
 }
 
-// ShowBallance, exibe o saldo
-func ShowBallance(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Mostrando o saldo"))
+// ShowBalance, exibe o saldo
+func ShowBalance(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	accountId := params["account_id"]
+
+	accountPerson, err := db.ListAccount(accountId)
+	if err != nil {
+		responses.RespondError(w, http.StatusBadRequest, err)
+	}
+
+	fmt.Println(accountPerson)
+
 }
 
 // ShowAccounts, lista as contas

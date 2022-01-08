@@ -9,6 +9,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/src/responses"
 )
 
+// Login, cria o logon para a api
 func Login(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if err != nil {
