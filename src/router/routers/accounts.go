@@ -14,9 +14,9 @@ var accountRouters = []Router{
 		Authentication: false,
 	},
 	{
-		URI:            "/accounts/{account_id}/ballance",
+		URI:            "/accounts/{account_id}/balance",
 		Method:         http.MethodGet,
-		Function:       controllers.ShowBallance,
+		Function:       controllers.ShowBalance,
 		Authentication: false,
 	},
 	{
