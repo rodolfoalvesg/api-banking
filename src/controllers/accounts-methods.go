@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -15,6 +14,10 @@ import (
 
 	"github.com/google/uuid"
 )
+
+type BalanceAccount struct {
+	Balance int `json:"balance,omitempty"`
+}
 
 // CreateAccount cria uma conta
 func CreateAccount(w http.ResponseWriter, r *http.Request) {
@@ -61,8 +64,11 @@ func ShowBalance(w http.ResponseWriter, r *http.Request) {
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
 
-	fmt.Println(accountPerson)
+	responseAccount := BalanceAccount{
+		Balance: accountPerson.Balance,
+	}
 
+	responses.RespondJSON(w, http.StatusOK, responseAccount)
 }
 
 // ShowAccounts, lista as contas

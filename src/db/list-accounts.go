@@ -10,7 +10,6 @@ var BaseAccounts []models.Account
 
 func CreatedAccount(account models.Account) {
 	BaseAccounts = append(BaseAccounts, account)
-	fmt.Println(BaseAccounts)
 }
 
 func ListAccount(id string) (models.Account, error) {
