@@ -1,18 +1,17 @@
 package models
 
 import (
-	"encoding/json"
 	"regexp"
 	"time"
 )
 
 type Account struct {
-	Id        string      `json:"id,omitempty"`
-	Name      string      `json:"name,omitempty"`
-	Cpf       string      `json:"cpf,omitempty"`
-	Secret    string      `json:"secret,omitempty"`
-	Balance   json.Number `json:"balance,omitempty"`
-	CreatedAt time.Time   `json:"created_at,omitempty"`
+	Id        string    `json:"id"`
+	Name      string    `json:"name"`
+	Cpf       string    `json:"cpf"`
+	Secret    string    `json:"secret"`
+	Balance   int       `json:"balance"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
 // FormatDocumentNumber remove espações e caracteres não alphanuméricos
