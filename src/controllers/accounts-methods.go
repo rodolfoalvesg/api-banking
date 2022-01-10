@@ -59,7 +59,7 @@ func ShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	accountId := params["account_id"]
 
-	accountPerson, err := db.ListAccount(accountId)
+	accountPerson, err := db.ListBalance(accountId)
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
@@ -73,5 +73,11 @@ func ShowBalance(w http.ResponseWriter, r *http.Request) {
 
 // ShowAccounts, lista as contas
 func ShowAccounts(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Listando contas"))
+
+	accountLits, err := db.ListAccounts()
+	if err != nil {
+		responses.RespondError(w, http.StatusBadRequest, err)
+	}
+
+	responses.RespondJSON(w, http.StatusOK, accountLits)
 }

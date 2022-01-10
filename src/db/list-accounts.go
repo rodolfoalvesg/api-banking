@@ -12,11 +12,15 @@ func CreatedAccount(account models.Account) {
 	BaseAccounts = append(BaseAccounts, account)
 }
 
-func ListAccount(id string) (models.Account, error) {
+func ListBalance(id string) (models.Account, error) {
 	for _, account := range BaseAccounts {
 		if id == account.Id {
 			return account, nil
 		}
 	}
 	return models.Account{}, fmt.Errorf("Não encontrado")
+}
+
+func ListAccounts() ([]models.Account, error) {
+	return BaseAccounts, nil
 }
