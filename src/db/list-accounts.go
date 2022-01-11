@@ -24,3 +24,13 @@ func ListBalance(id string) (models.Account, error) {
 func ListAccounts() ([]models.Account, error) {
 	return BaseAccounts, nil
 }
+
+func SearchDocument(cpf string) (models.Account, error) {
+	for _, document := range BaseAccounts {
+		if cpf == document.Cpf {
+			return document, nil
+		}
+	}
+
+	return models.Account{}, nil
+}
