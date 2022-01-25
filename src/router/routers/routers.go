@@ -9,7 +9,7 @@ import (
 type Router struct {
 	URI            string
 	Method         string
-	Function       func(http.ResponseWriter, *http.Request)
+	Function       func(w http.ResponseWriter, r *http.Request)
 	Authentication bool
 }
 

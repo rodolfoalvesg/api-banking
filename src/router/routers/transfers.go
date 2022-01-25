@@ -10,7 +10,7 @@ var transfersRouters = []Router{
 	{
 		URI:            "/transfers",
 		Method:         http.MethodPost,
-		Function:       controllers.AmountTransfers,
+		Function:       controllers.HandleTransfers,
 		Authentication: false,
 	},
 	{

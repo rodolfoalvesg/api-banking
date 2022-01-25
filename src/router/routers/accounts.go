@@ -10,7 +10,7 @@ var accountRouters = []Router{
 	{
 		URI:            "/accounts",
 		Method:         http.MethodPost,
-		Function:       controllers.CreateAccount,
+		Function:       controllers.RouteMethods.HandleCreateAccount,
 		Authentication: false,
 	},
 	{
