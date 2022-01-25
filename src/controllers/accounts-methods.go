@@ -14,13 +14,11 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/src/security"
 )
 
-type RouteMethods interface {
-	HandleCreateAccount(w http.ResponseWriter, r *http.Request)
-}
-
 type Controller struct {
 	db db.Database
 }
+
+var Control = &Controller{}
 
 type BalanceAccount struct {
 	Balance int `json:"balance,omitempty"`
@@ -56,21 +54,26 @@ func (c *Controller) HandleCreateAccount(w http.ResponseWriter, r *http.Request)
 	account.Secret = string(passwdHash) //account.Secret, atribui ao campo de senha do modelo o HASH
 	account.Id = uuid.New().String()    //account.Id, cria um id único e atribui ao campo Id
 
-	c.db.AddedAccount(account) //db.CreatedAccount, insere os dados na Base de dados
+	modelAccount := &db.CreateAccount{
+		Account: account,
+	}
+	modelList := &db.ListBalance{}
 
-	responses.RespondJSON(w, http.StatusOK, c.db.ShowAccounts)
+	modelAccount.AddedAccount()
 
+	responses.RespondJSON(w, http.StatusOK, modelList.ShowAccounts)
 }
-
-// func HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
-// }
 
 // ShowBalance, exibe o saldo
 func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	accountId := params["account_id"]
 
-	accountPerson, err := c.db.ShowBalanceId(accountId)
+	modelListId := &db.ListBalance{
+		Id: accountId,
+	}
+
+	accountPerson, err := modelListId.ShowBalanceId()
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
@@ -81,9 +84,6 @@ func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 
 	responses.RespondJSON(w, http.StatusOK, responseAccount)
 }
-
-// func ShowBalance(w http.ResponseWriter, r *http.Request) {
-// }
 
 // ShowAccounts, lista as contas
 func (c *Controller) ShowAccounts(w http.ResponseWriter, r *http.Request) {

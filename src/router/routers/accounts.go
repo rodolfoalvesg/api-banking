@@ -10,19 +10,19 @@ var accountRouters = []Router{
 	{
 		URI:            "/accounts",
 		Method:         http.MethodPost,
-		Function:       controllers.RouteMethods.HandleCreateAccount,
+		Function:       controllers.Control.HandleCreateAccount,
 		Authentication: false,
 	},
 	{
 		URI:            "/accounts/{account_id}/balance",
 		Method:         http.MethodGet,
-		Function:       controllers.ShowBalance,
+		Function:       controllers.Control.ShowBalance,
 		Authentication: false,
 	},
 	{
 		URI:            "/accounts",
 		Method:         http.MethodGet,
-		Function:       controllers.ShowAccounts,
+		Function:       controllers.Control.ShowAccounts,
 		Authentication: false,
 	},
 }

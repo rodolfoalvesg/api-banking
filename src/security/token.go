@@ -8,7 +8,7 @@ import (
 )
 
 //CreateToken, retorna um token assinado com as permissões de usuários
-func CreateToken(userId int64) (string, error) {
+func CreateToken(userId string) (string, error) {
 
 	permission := jwt.MapClaims{}
 	permission["authorized"] = true

@@ -9,44 +9,48 @@ import (
 var baseAccounts []models.Account
 
 type Database interface {
-	AddedAccount(models.Account)
-	ShowBalanceId(id string) (models.Account, error)
+	AddedAccount()
+	ShowBalanceId() (models.Account, error)
 	ShowAccounts() ([]models.Account, error)
 	FindDocument(cpf string) (models.Account, error)
 }
 
 type CreateAccount struct {
-	account models.Account
+	Account models.Account
 }
 
 type ListBalance struct {
-	id string
+	Id string
 }
-
-type ListAccounts []models.Account
 
 type SearchDocument struct {
 	cpf string
 }
 
-func (c *CreateAccount) addedAccount() {
-	baseAccounts = append(baseAccounts, c.account)
+// addedAccount, insere a conta no banco
+func (c CreateAccount) AddedAccount() {
+	fmt.Println("cheguei aqui")
+	baseAccounts = append(baseAccounts, c.Account)
+	fmt.Println(baseAccounts)
 }
 
-func (l ListBalance) showBalanceId() (models.Account, error) {
+// showBalanceId, exibe o saldo da conta, pelo id.
+func (l ListBalance) ShowBalanceId() (models.Account, error) {
 	for _, account := range baseAccounts {
-		if l.id == account.Id {
+		if l.Id == account.Id {
 			return account, nil
 		}
 	}
 	return models.Account{}, fmt.Errorf("Não encontrado")
 }
 
-func (l ListAccounts) showAccounts() ([]models.Account, error) {
+// showAccounts, lista todas as contas
+func (l ListBalance) ShowAccounts() ([]models.Account, error) {
 	return baseAccounts, nil
 }
 
-func (s SearchDocument) findDocument() (models.Account, error) {
+// findDocument Procurar se existe o cpf passado
+func (s SearchDocument) FindDocument() (models.Account, error) {
 	for _, document := range baseAccounts {
 		if s.cpf == document.Cpf {
 			return document, nil
