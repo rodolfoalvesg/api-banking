@@ -6,21 +6,28 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/src/db"
 	"github.com/rodolfoalvesg/api-banking/api/src/models"
 	"github.com/rodolfoalvesg/api-banking/api/src/responses"
 	"github.com/rodolfoalvesg/api-banking/api/src/security"
-
-	"github.com/google/uuid"
 )
+
+type RouteMethods interface {
+	HandleCreateAccount(w http.ResponseWriter, r *http.Request)
+}
+
+type Controller struct {
+	db db.Database
+}
 
 type BalanceAccount struct {
 	Balance int `json:"balance,omitempty"`
 }
 
 // CreateAccount cria uma conta
-func CreateAccount(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.RespondError(w, http.StatusUnprocessableEntity, err)
@@ -49,17 +56,21 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	account.Secret = string(passwdHash) //account.Secret, atribui ao campo de senha do modelo o HASH
 	account.Id = uuid.New().String()    //account.Id, cria um id único e atribui ao campo Id
 
-	db.CreatedAccount(account) //db.CreatedAccount, insere os dados na Base de dados
+	c.db.AddedAccount(account) //db.CreatedAccount, insere os dados na Base de dados
 
-	responses.RespondJSON(w, http.StatusOK, db.BaseAccounts)
+	responses.RespondJSON(w, http.StatusOK, c.db.ShowAccounts)
+
 }
 
+// func HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
+// }
+
 // ShowBalance, exibe o saldo
-func ShowBalance(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	accountId := params["account_id"]
 
-	accountPerson, err := db.ListBalance(accountId)
+	accountPerson, err := c.db.ShowBalanceId(accountId)
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
@@ -71,10 +82,13 @@ func ShowBalance(w http.ResponseWriter, r *http.Request) {
 	responses.RespondJSON(w, http.StatusOK, responseAccount)
 }
 
-// ShowAccounts, lista as contas
-func ShowAccounts(w http.ResponseWriter, r *http.Request) {
+// func ShowBalance(w http.ResponseWriter, r *http.Request) {
+// }
 
-	accountLits, err := db.ListAccounts()
+// ShowAccounts, lista as contas
+func (c *Controller) ShowAccounts(w http.ResponseWriter, r *http.Request) {
+
+	accountLits, err := c.db.ShowAccounts()
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
