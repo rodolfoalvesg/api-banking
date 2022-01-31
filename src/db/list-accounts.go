@@ -12,32 +12,26 @@ type Database interface {
 	AddedAccount()
 	ShowBalanceId() (models.Account, error)
 	ShowAccounts() ([]models.Account, error)
-	FindDocument(cpf string) (models.Account, error)
+	FindDocument() (models.Account, error)
 }
 
-type CreateAccount struct {
-	Account models.Account
-}
-
-type ListBalance struct {
-	Id string
-}
-
-type SearchDocument struct {
-	cpf string
+type FieldsToMethodsDB struct {
+	Accounts models.Account
+	Id       string
+	Cpf      string
 }
 
 // addedAccount, insere a conta no banco
-func (c CreateAccount) AddedAccount() {
+func (f *FieldsToMethodsDB) AddedAccount() {
 	fmt.Println("cheguei aqui")
-	baseAccounts = append(baseAccounts, c.Account)
+	baseAccounts = append(baseAccounts, f.Accounts)
 	fmt.Println(baseAccounts)
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
-func (l ListBalance) ShowBalanceId() (models.Account, error) {
+func (f *FieldsToMethodsDB) ShowBalanceId() (models.Account, error) {
 	for _, account := range baseAccounts {
-		if l.Id == account.Id {
+		if f.Id == account.Id {
 			return account, nil
 		}
 	}
@@ -45,14 +39,14 @@ func (l ListBalance) ShowBalanceId() (models.Account, error) {
 }
 
 // showAccounts, lista todas as contas
-func (l ListBalance) ShowAccounts() ([]models.Account, error) {
+func (f *FieldsToMethodsDB) ShowAccounts() ([]models.Account, error) {
 	return baseAccounts, nil
 }
 
 // findDocument Procurar se existe o cpf passado
-func (s SearchDocument) FindDocument() (models.Account, error) {
+func (f *FieldsToMethodsDB) FindDocument() (models.Account, error) {
 	for _, document := range baseAccounts {
-		if s.cpf == document.Cpf {
+		if f.Cpf == document.Cpf {
 			return document, nil
 		}
 	}
