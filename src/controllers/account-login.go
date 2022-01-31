@@ -26,7 +26,7 @@ func (c *Controller) Login(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	verifyDocument, err := c.db.FindDocument(account.Cpf)
+	verifyDocument, err := c.FindDocument()
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
 		return

@@ -14,12 +14,6 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/src/security"
 )
 
-type Controller struct {
-	db db.Database
-}
-
-var Control = &Controller{}
-
 type BalanceAccount struct {
 	Balance int `json:"balance,omitempty"`
 }
@@ -54,14 +48,18 @@ func (c *Controller) HandleCreateAccount(w http.ResponseWriter, r *http.Request)
 	account.Secret = string(passwdHash) //account.Secret, atribui ao campo de senha do modelo o HASH
 	account.Id = uuid.New().String()    //account.Id, cria um id único e atribui ao campo Id
 
-	modelAccount := &db.CreateAccount{
-		Account: account,
+	modelAccount := &db.FieldsToMethodsDB{
+		Accounts: account,
 	}
-	modelList := &db.ListBalance{}
+	modelList := &db.FieldsToMethodsDB{}
 
 	modelAccount.AddedAccount()
+	data, err := modelList.ShowAccounts()
+	if err != nil {
+		responses.RespondError(w, http.StatusBadRequest, err)
+	}
 
-	responses.RespondJSON(w, http.StatusOK, modelList.ShowAccounts)
+	responses.RespondJSON(w, http.StatusOK, data)
 }
 
 // ShowBalance, exibe o saldo
@@ -69,7 +67,7 @@ func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	accountId := params["account_id"]
 
-	modelListId := &db.ListBalance{
+	modelListId := &db.FieldsToMethodsDB{
 		Id: accountId,
 	}
 
@@ -87,8 +85,8 @@ func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 
 // ShowAccounts, lista as contas
 func (c *Controller) ShowAccounts(w http.ResponseWriter, r *http.Request) {
-
-	accountLits, err := c.db.ShowAccounts()
+	modelShowAccounts := &db.FieldsToMethodsDB{}
+	accountLits, err := modelShowAccounts.ShowAccounts()
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
