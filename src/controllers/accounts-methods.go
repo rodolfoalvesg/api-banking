@@ -19,7 +19,7 @@ type BalanceAccount struct {
 }
 
 // CreateAccount cria uma conta
-func (c *Controller) HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.RespondError(w, http.StatusUnprocessableEntity, err)
@@ -63,7 +63,7 @@ func (c *Controller) HandleCreateAccount(w http.ResponseWriter, r *http.Request)
 }
 
 // ShowBalance, exibe o saldo
-func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	accountId := params["account_id"]
 
@@ -84,7 +84,7 @@ func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 }
 
 // ShowAccounts, lista as contas
-func (c *Controller) ShowAccounts(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandlerShowAccounts(w http.ResponseWriter, r *http.Request) {
 	modelShowAccounts := &db.FieldsToMethodsDB{}
 	accountLits, err := modelShowAccounts.ShowAccounts()
 	if err != nil {
