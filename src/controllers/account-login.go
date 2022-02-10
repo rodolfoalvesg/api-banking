@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/rodolfoalvesg/api-banking/api/src/db"
 	"github.com/rodolfoalvesg/api-banking/api/src/models"
 	"github.com/rodolfoalvesg/api-banking/api/src/responses"
 	"github.com/rodolfoalvesg/api-banking/api/src/security"
 )
 
 // Login, cria o logon para a api
-func (c *Controller) Login(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.RespondError(w, http.StatusUnprocessableEntity, err)
@@ -26,7 +27,8 @@ func (c *Controller) Login(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	verifyDocument, err := c.FindDocument()
+	modelFindDocument := db.FieldsToMethodsDB{}
+	verifyDocument, err := modelFindDocument.FindDocument()
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
 		return
