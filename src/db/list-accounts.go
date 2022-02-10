@@ -23,9 +23,7 @@ type FieldsToMethodsDB struct {
 
 // addedAccount, insere a conta no banco
 func (f *FieldsToMethodsDB) AddedAccount() {
-	fmt.Println("cheguei aqui")
 	baseAccounts = append(baseAccounts, f.Accounts)
-	fmt.Println(baseAccounts)
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
