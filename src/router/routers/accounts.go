@@ -4,25 +4,28 @@ import (
 	"net/http"
 
 	"github.com/rodolfoalvesg/api-banking/api/src/controllers"
+	"github.com/rodolfoalvesg/api-banking/api/src/db"
 )
+
+var controller = controllers.NewController(&db.FieldsToMethodsDB{})
 
 var accountRouters = []Router{
 	{
 		URI:            "/accounts",
 		Method:         http.MethodPost,
-		Function:       controllers.Control.HandleCreateAccount,
+		Function:       controller.HandlerCreateAccount,
 		Authentication: false,
 	},
 	{
 		URI:            "/accounts/{account_id}/balance",
 		Method:         http.MethodGet,
-		Function:       controllers.Control.ShowBalance,
+		Function:       controller.HandlerShowBalance,
 		Authentication: false,
 	},
 	{
 		URI:            "/accounts",
 		Method:         http.MethodGet,
-		Function:       controllers.Control.ShowAccounts,
+		Function:       controller.HandlerShowAccounts,
 		Authentication: false,
 	},
 }
