@@ -1,10 +1,17 @@
 package controllers
 
-import "github.com/rodolfoalvesg/api-banking/api/src/db"
+import (
+	"net/http"
 
-type Controller struct {
-	db.Database
+	"github.com/rodolfoalvesg/api-banking/api/src/db"
+)
+
+type Controls interface {
+	HandlerCreateAccount(http.ResponseWriter, *http.Request)
+	HandlerShowBalance(http.ResponseWriter, *http.Request)
+	HandlerShowAccounts(http.ResponseWriter, *http.Request)
 }
+type Controller struct{}
 
 func NewController(db db.Database) *Controller {
 	return &Controller{}
