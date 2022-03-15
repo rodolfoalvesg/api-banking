@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -13,10 +13,6 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/src/responses"
 	"github.com/rodolfoalvesg/api-banking/api/src/security"
 )
-
-type BalanceAccount struct {
-	Balance int `json:"balance,omitempty"`
-}
 
 // CreateAccount cria uma conta
 func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request) {
@@ -32,12 +28,6 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	account.FormatDocumentNumber() //FormatDocumentNumber formata os valores do cpf tirando caractees
-	if account.Cpf == "" || len(account.Cpf) > 11 {
-		responses.RespondError(w, http.StatusBadRequest, errors.New("O número do documento deve possuir 11 caracteres"))
-		return
-	}
-
 	defer r.Body.Close()
 
 	passwdHash, err := security.SecurityHash(account.Secret) //Cria um hash da senha passada
@@ -45,15 +35,16 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
 
-	account.Secret = string(passwdHash) //account.Secret, atribui ao campo de senha do modelo o HASH
-	account.Id = uuid.New().String()    //account.Id, cria um id único e atribui ao campo Id
-
+	account.Secret = string(passwdHash)  //account.Secret, atribui ao campo de senha do modelo o HASH
+	account.Id = uuid.New().String()     //account.Id, cria um id único e atribui ao campo Id
+	account.CreatedAt = time.Now().UTC() //account.CreatedAt, data e hora
 	modelAccount := &db.FieldsToMethodsDB{
 		Accounts: account,
 	}
-	modelList := &db.FieldsToMethodsDB{}
 
 	modelAccount.AddedAccount()
+
+	modelList := &db.FieldsToMethodsDB{}
 	data, err := modelList.ShowAccounts()
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
@@ -76,11 +67,11 @@ func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) 
 		responses.RespondError(w, http.StatusBadRequest, err)
 	}
 
-	responseAccount := BalanceAccount{
+	responseAccount := &db.FieldsToMethodsDB{
 		Balance: accountPerson.Balance,
 	}
 
-	responses.RespondJSON(w, http.StatusOK, responseAccount)
+	responses.RespondJSON(w, http.StatusOK, responseAccount.Balance)
 }
 
 // ShowAccounts, lista as contas
