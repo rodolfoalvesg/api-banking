@@ -19,6 +19,7 @@ type FieldsToMethodsDB struct {
 	Accounts models.Account
 	Id       string
 	Cpf      string
+	Balance  int `json:"balance,omitempty"`
 }
 
 // addedAccount, insere a conta no banco
@@ -28,6 +29,7 @@ func (f *FieldsToMethodsDB) AddedAccount() {
 
 // showBalanceId, exibe o saldo da conta, pelo id.
 func (f *FieldsToMethodsDB) ShowBalanceId() (models.Account, error) {
+
 	for _, account := range baseAccounts {
 		if f.Id == account.Id {
 			return account, nil
