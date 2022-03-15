@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// JSON retorna uma resposta em JSON para a requisição
+// RespondJSON, retorna uma resposta em JSON para a requisição
 func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	response, err := json.Marshal(data)
 	if err != nil {
@@ -20,7 +20,7 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 
 }
 
-// Erro retorna um erro em formato JSON
+// RespondError, retorna um erro em formato JSON
 func RespondError(w http.ResponseWriter, statusCode int, err error) {
 	RespondJSON(w, statusCode, map[string]error{"error": err})
 }
