@@ -2,6 +2,8 @@ package accounts
 
 import (
 	"encoding/json"
+	"io"
+	"io/ioutil"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,7 +12,12 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/src/security"
 )
 
-func CreateAccount(bodyRequest []byte, err error) ([]models.Account, error) {
+func CreateAccount(body io.ReadCloser) ([]models.Account, error) {
+	bodyRequest, err := ioutil.ReadAll(body)
+	if err != nil {
+		return nil, err
+	}
+
 	var account models.Account
 	err = json.Unmarshal(bodyRequest, &account)
 	if err != nil {
@@ -38,4 +45,33 @@ func CreateAccount(bodyRequest []byte, err error) ([]models.Account, error) {
 	}
 
 	return data, nil
+}
+
+func ShowBalance(params map[string]string) (int, error) {
+
+	accountId := params["account_id"]
+
+	modelListId := &db.FieldsToMethodsDB{
+		Id: accountId,
+	}
+
+	accountPerson, err := modelListId.ShowBalanceId()
+	if err != nil {
+		return 0, err
+	}
+
+	responseAccount := &db.FieldsToMethodsDB{
+		Balance: accountPerson.Balance,
+	}
+
+	return responseAccount.Balance, nil
+}
+
+func ShowListAccounts() ([]models.Account, error) {
+	modelShowAccounts := &db.FieldsToMethodsDB{}
+	accountLits, err := modelShowAccounts.ShowAccounts()
+	if err != nil {
+		return nil, err
+	}
+	return accountLits, err
 }
