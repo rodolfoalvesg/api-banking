@@ -13,14 +13,16 @@ import (
 // CreateAccount cria uma conta
 func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, err := ioutil.ReadAll(r.Body)
-	data, err := accounts.CreateAccount(bodyRequest, err)
+	acc, err := accounts.CreateAccount(bodyRequest, err)
 	if err != nil {
-		responses.RespondJSON(w, http.StatusOK, err)
+		responses.RespondJSON(w, http.StatusBadRequest, err)
+		return
 	}
 
 	defer r.Body.Close()
 
-	responses.RespondJSON(w, http.StatusOK, data)
+	responses.RespondJSON(w, http.StatusOK, acc)
+	return
 }
 
 // ShowBalance, exibe o saldo
