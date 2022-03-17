@@ -2,6 +2,7 @@ package accounts
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"time"
@@ -22,6 +23,10 @@ func CreateAccount(body io.ReadCloser) ([]models.Account, error) {
 	err = json.Unmarshal(bodyRequest, &account)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(account.Secret) < 8 || account.Secret == "" {
+		return nil, fmt.Errorf("A senha informada não atende os requisitos")
 	}
 
 	passwdHash, err := security.SecurityHash(account.Secret) //Cria um hash da senha passada
@@ -50,6 +55,10 @@ func CreateAccount(body io.ReadCloser) ([]models.Account, error) {
 func ShowBalance(params map[string]string) (int, error) {
 
 	accountId := params["account_id"]
+
+	if len(accountId) == 0 {
+		return 0, fmt.Errorf("O id não pode ser vazio")
+	}
 
 	modelListId := &db.FieldsToMethodsDB{
 		Id: accountId,
