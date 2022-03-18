@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -55,76 +56,55 @@ func TestHandlerCreateAccount(t *testing.T) {
 
 }
 
-// TestHandlerShowBalance, teste do handler para exibição de saldo
-// func TestHandlerShowBalance(t *testing.T) {
-// 	t.Parallel()
+//TestHandlerShowBalance, teste do handler para exibição de saldo
+func TestHandlerShowBalance(t *testing.T) {
+	t.Parallel()
 
-// 	accBalanceA := models.Account{
-// 		Id: "kgdf4gf4gfdgf554gsfag4g",
-// 	}
+	accBalanceA := models.Account{
+		Id: "kgdf4gf4gfdgf554gsfag4g",
+	}
 
-// 	controller := NewController(nil)
+	controller := NewController(nil)
 
-// 	testShowBalance := map[string]struct {
-// 		accBalanceId models.Account
-// 		want         int
-// 	}{
-// 		"Status OK": {accBalanceA, http.StatusOK},
-// 		//"Status Bad": {personAccountB.Id, http.StatusBadRequest},
-// 	}
+	testShowBalance := map[string]struct {
+		accBalanceId models.Account
+		want         int
+	}{
+		"Status OK": {accBalanceA, http.StatusOK},
+		//"Status Bad": {personAccountB.Id, http.StatusBadRequest},
+	}
 
-// 	for name, tt := range testShowBalance {
+	for name, tt := range testShowBalance {
 
-// 		bodyBytes, err := json.Marshal(tt.accBalanceId)
-// 		if err != nil {
-// 			t.Fatal(err)
-// 		}
+		path := fmt.Sprintf("/accounts/%s/balance", tt.accBalanceId.Id)
 
-// 		body := bytes.NewReader(bodyBytes)
+		request := httptest.NewRequest(http.MethodGet, path, nil)
+		response := httptest.NewRecorder()
 
-// 		request := httptest.NewRequest(http.MethodGet, "/accounts/{account_id}/balance", body)
-// 		response := httptest.NewRecorder()
+		controller.HandlerShowBalance(response, request)
 
-// 		params := mux.Vars(request)
-// 		fmt.Println("Aqui", params)
+		respondeCode := response.Result().StatusCode
 
-// 		controller.HandlerShowBalance(response, request)
+		if respondeCode != tt.want {
+			t.Errorf("%s: got %v, want %v", name, respondeCode, tt.want)
+		}
 
-// 		respondeCode := response.Result().StatusCode
-
-// 		if respondeCode != tt.want {
-// 			t.Errorf("%s: got %v, want %v", name, respondeCode, tt.want)
-// 		}
-
-// 	}
-// }
+	}
+}
 
 // TestHandlerShowAccounts, teste do handler para listagem de conta
-// func TestHandlerShowAccounts(t *testing.T) {
-// 	t.Parallel()
+func TestHandlerShowAccounts(t *testing.T) {
+	t.Parallel()
 
-// 	personAccount := models.Account{
-// 		Name:    "Rodolfo Alves",
-// 		Cpf:     "01225465245",
-// 		Secret:  "12345678",
-// 		Balance: 5000,
-// 	}
+	controller := NewController(nil)
 
-// 	controller := NewController(nil)
+	response := httptest.NewRecorder()
+	request := httptest.NewRequest(http.MethodGet, "/accounts", nil)
 
-// 	response := httptest.NewRecorder()
+	controller.HandlerShowAccounts(response, request)
 
-// 	bodyBytes, err := json.Marshal(personAccount)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
+	if response.Result().StatusCode != http.StatusOK {
+		t.Fail()
+	}
 
-// 	body := bytes.NewReader(bodyBytes)
-
-// 	request := httptest.NewRequest(http.MethodGet, "/accounts", body)
-
-// 	controller.HandlerShowAccounts(response, request)
-// 	if response.Result().StatusCode != http.StatusOK {
-// 		t.Fail()
-// 	}
-// }
+}
