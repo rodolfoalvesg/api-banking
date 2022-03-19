@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -24,9 +23,6 @@ func HandleTransfers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer r.Body.Close()
-
-	fmt.Println(transfers)
-
 }
 
 func ShowTransfers(w http.ResponseWriter, r *http.Request) {
