@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/src/models"
 )
 
@@ -53,7 +54,6 @@ func TestHandlerCreateAccount(t *testing.T) {
 			t.Errorf("%s: got %v, want %v", name, responseCode, tt.want)
 		}
 	}
-
 }
 
 //TestHandlerShowBalance, teste do handler para exibição de saldo
@@ -63,6 +63,9 @@ func TestHandlerShowBalance(t *testing.T) {
 	accBalanceA := models.Account{
 		Id: "kgdf4gf4gfdgf554gsfag4g",
 	}
+	accBalanceB := models.Account{
+		Id: "44",
+	}
 
 	controller := NewController(nil)
 
@@ -70,8 +73,8 @@ func TestHandlerShowBalance(t *testing.T) {
 		accBalanceId models.Account
 		want         int
 	}{
-		"Status OK": {accBalanceA, http.StatusOK},
-		//"Status Bad": {personAccountB.Id, http.StatusBadRequest},
+		"Status OK":  {accBalanceA, http.StatusOK},
+		"Status Bad": {accBalanceB, http.StatusBadRequest},
 	}
 
 	for name, tt := range testShowBalance {
@@ -80,6 +83,13 @@ func TestHandlerShowBalance(t *testing.T) {
 
 		request := httptest.NewRequest(http.MethodGet, path, nil)
 		response := httptest.NewRecorder()
+
+		vars := map[string]string{
+			"account_id": tt.accBalanceId.Id,
+		}
+
+		// CHANGE THIS LINE!!!
+		request = mux.SetURLVars(request, vars)
 
 		controller.HandlerShowBalance(response, request)
 
@@ -106,5 +116,4 @@ func TestHandlerShowAccounts(t *testing.T) {
 	if response.Result().StatusCode != http.StatusOK {
 		t.Fail()
 	}
-
 }
