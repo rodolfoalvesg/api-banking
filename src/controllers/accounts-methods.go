@@ -19,7 +19,6 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 	defer r.Body.Close()
 
 	responses.RespondJSON(w, http.StatusOK, acc)
-	return
 }
 
 // ShowBalance, exibe o saldo
@@ -32,7 +31,6 @@ func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) 
 	}
 
 	responses.RespondJSON(w, http.StatusOK, accBalance)
-	return
 }
 
 // ShowAccounts, lista as contas
@@ -43,5 +41,4 @@ func (c *Controller) HandlerShowAccounts(w http.ResponseWriter, r *http.Request)
 	}
 
 	responses.RespondJSON(w, http.StatusOK, accList)
-	return
 }
