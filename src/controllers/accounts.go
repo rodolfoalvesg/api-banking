@@ -1,16 +1,24 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/src/entities/accounts"
+	"github.com/rodolfoalvesg/api-banking/api/src/models"
 	"github.com/rodolfoalvesg/api-banking/api/src/responses"
 )
 
 // CreateAccount cria uma conta
 func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request) {
-	acc, err := accounts.CreateAccount(r.Body)
+	var account models.Account
+
+	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
+		responses.RespondError(w, http.StatusBadRequest, err)
+	}
+
+	acc, err := accounts.CreateAccount(account)
 	if err != nil {
 		responses.RespondJSON(w, http.StatusBadRequest, err)
 		return
@@ -24,7 +32,9 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 // ShowBalance, exibe o saldo
 func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	accBalance, err := accounts.ShowBalance(params)
+	accountId := params["account_id"]
+
+	accBalance, err := accounts.ShowBalance(accountId)
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 		return
