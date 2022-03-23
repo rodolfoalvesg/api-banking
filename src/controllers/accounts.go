@@ -32,9 +32,10 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 // ShowBalance, exibe o saldo
 func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	accountId := params["account_id"]
 
-	accBalance, err := accounts.ShowBalance(accountId)
+	accountID := params["account_id"]
+
+	accBalance, err := accounts.ShowBalance(accountID)
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 		return
