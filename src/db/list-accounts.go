@@ -2,21 +2,11 @@ package db
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/rodolfoalvesg/api-banking/api/src/models"
 )
 
-var baseAccounts = []models.Account{
-	{
-		Id:        "kgdf4gf4gfdgf554gsfag4g",
-		Name:      "Rodolfo Alves",
-		Cpf:       "01225465245",
-		Secret:    "12345678",
-		Balance:   5000,
-		CreatedAt: time.Now(),
-	},
-}
+var baseAccounts = []models.Account{}
 
 type Database interface {
 	AddedAccount()
