@@ -67,7 +67,6 @@ func TestHandlerShowBalance(t *testing.T) {
 	}
 
 	accListA, _ := accounts.CreateAccount(accFake)
-	fmt.Println(accListA)
 	accListB := models.Account{}
 
 	controller := NewController(nil)
@@ -92,7 +91,6 @@ func TestHandlerShowBalance(t *testing.T) {
 			"account_id": tt.accBalanceId.Id,
 		}
 
-		// CHANGE THIS LINE!!!
 		request = mux.SetURLVars(request, vars)
 
 		controller.HandlerShowBalance(response, request)
