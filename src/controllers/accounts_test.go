@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
+	"github.com/rodolfoalvesg/api-banking/api/src/entities/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/src/models"
 )
 
@@ -60,12 +61,14 @@ func TestHandlerCreateAccount(t *testing.T) {
 func TestHandlerShowBalance(t *testing.T) {
 	t.Parallel()
 
-	accBalanceA := models.Account{
-		Id: "kgdf4gf4gfdgf554gsfag4g",
+	accFake := models.Account{
+		Id:     "dfsh15hjfg4hgfsdhgdsf",
+		Secret: "123456789",
 	}
-	accBalanceB := models.Account{
-		Id: "44",
-	}
+
+	accListA, _ := accounts.CreateAccount(accFake)
+	fmt.Println(accListA)
+	accListB := models.Account{}
 
 	controller := NewController(nil)
 
@@ -73,11 +76,12 @@ func TestHandlerShowBalance(t *testing.T) {
 		accBalanceId models.Account
 		want         int
 	}{
-		"Status OK":  {accBalanceA, http.StatusOK},
-		"Status Bad": {accBalanceB, http.StatusBadRequest},
+		"Status OK":  {accListA[0], http.StatusOK},
+		"Status Bad": {accListB, http.StatusBadRequest},
 	}
 
 	for name, tt := range testShowBalance {
+		fmt.Println(tt.accBalanceId.Id)
 
 		path := fmt.Sprintf("/accounts/%s/balance", tt.accBalanceId.Id)
 
@@ -108,10 +112,12 @@ func TestHandlerShowAccounts(t *testing.T) {
 
 	controller := NewController(nil)
 
-	response := httptest.NewRecorder()
 	request := httptest.NewRequest(http.MethodGet, "/accounts", nil)
+	response := httptest.NewRecorder()
 
 	controller.HandlerShowAccounts(response, request)
+
+	fmt.Println(response)
 
 	if response.Result().StatusCode != http.StatusOK {
 		t.Fail()
