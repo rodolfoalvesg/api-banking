@@ -1,9 +1,14 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/rodolfoalvesg/api-banking/api/src/models"
+)
+
+var (
+	ErrNotFound = errors.New("Conta não localizada")
 )
 
 var baseAccounts = []models.Account{}
@@ -25,6 +30,7 @@ type FieldsToMethodsDB struct {
 // addedAccount, insere a conta no banco
 func (f *FieldsToMethodsDB) AddedAccount() {
 	baseAccounts = append(baseAccounts, f.Accounts)
+	fmt.Println(baseAccounts)
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
@@ -35,7 +41,7 @@ func (f *FieldsToMethodsDB) ShowBalanceId() (models.Account, error) {
 			return account, nil
 		}
 	}
-	return models.Account{}, fmt.Errorf("Não encontrado")
+	return models.Account{}, ErrNotFound
 }
 
 // showAccounts, lista todas as contas
