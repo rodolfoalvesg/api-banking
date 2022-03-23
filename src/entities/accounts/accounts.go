@@ -1,7 +1,7 @@
 package accounts
 
 import (
-	"fmt"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,10 +10,16 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/src/security"
 )
 
+var (
+	ErrInvalidPassword = errors.New("A senha nao atende aos requisitos")
+	ErrInvalidId       = errors.New("A senha nao atende aos requisitos")
+)
+
+// CreateAccount,
 func CreateAccount(acc models.Account) ([]models.Account, error) {
 
-	if len(acc.Secret) < 8 || acc.Secret == "" {
-		return nil, fmt.Errorf("A senha não atende aos requisitos")
+	if (len(acc.Secret) < 8) || (acc.Secret == "") {
+		return nil, ErrInvalidPassword
 	}
 
 	passwdHash, err := security.SecurityHash(acc.Secret) //Cria um hash da senha passada
@@ -42,7 +48,7 @@ func CreateAccount(acc models.Account) ([]models.Account, error) {
 func ShowBalance(accId string) (int, error) {
 
 	if len(accId) == 0 {
-		return 0, fmt.Errorf("O id não pode ser vazio")
+		return 0, ErrInvalidId
 	}
 
 	modelListId := &db.FieldsToMethodsDB{
