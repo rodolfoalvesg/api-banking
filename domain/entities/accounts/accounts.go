@@ -30,14 +30,6 @@ func NewCreateAccount(acc models.Account) (models.Account, error) {
 	acc.Secret = string(passwdHash)  //account.Secret, atribui ao campo de senha do modelo o HASH
 	acc.Id = uuid.New().String()     //account.Id, cria um id único e atribui ao campo Id
 	acc.CreatedAt = time.Now().UTC() //account.CreatedAt, data e hora
-	modelAccount := &db.FieldsToMethodsDB{
-		Accounts: acc,
-	}
-
-	acc, err = modelAccount.AddedAccount()
-	if err != nil {
-		return models.Account{}, err
-	}
 
 	return acc, nil
 }
