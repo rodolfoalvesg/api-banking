@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rodolfoalvesg/api-banking/api/src/config"
-	"github.com/rodolfoalvesg/api-banking/api/src/router"
+	"github.com/rodolfoalvesg/api-banking/api/common/config"
+	"github.com/rodolfoalvesg/api-banking/api/gateways/http/router"
 )
 
 func main() {
