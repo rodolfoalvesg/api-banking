@@ -12,7 +12,7 @@ import (
 
 var (
 	ErrInvalidPassword = errors.New("A senha nao atende aos requisitos")
-	ErrInvalidId       = errors.New("É preciso um ID válido como parâmetro")
+	ErrInvalidID       = errors.New("É preciso um ID válido como parâmetro")
 )
 
 // CreateAccount,
@@ -34,14 +34,14 @@ func NewCreateAccount(acc models.Account) (models.Account, error) {
 	return acc, nil
 }
 
-func ShowBalance(accId string) (int, error) {
+func ShowBalance(accID string) (int, error) {
 
-	if len(accId) == 0 {
-		return 0, ErrInvalidId
+	if len(accID) == 0 {
+		return 0, ErrInvalidID
 	}
 
 	modelListId := &db.FieldsToMethodsDB{
-		Id: accId,
+		Id: accID,
 	}
 
 	accountPerson, err := modelListId.ShowBalanceId()
