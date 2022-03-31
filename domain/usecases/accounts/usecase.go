@@ -15,7 +15,6 @@ type UsecaseToAccount interface {
 	CreateAccount(ctx context.Context, account []models.Account) ([]models.Account, error)
 	ShowBalanceID(ctx context.Context, accountID string) (int, error)
 	ShowListAccounts(ctx context.Context) ([]models.Account, error)
-	AddedAccount() (models.Account, error)
 }
 
 func NewUsecaseAccount(acc accounts.AccountRepository) *UsecaseAccount {
