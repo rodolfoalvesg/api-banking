@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -10,21 +11,26 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
 )
 
+var (
+	invalidID = errors.New("ID vazio, favor informar um id válido")
+)
+
 // CreateAccount cria uma conta
 func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request) {
 	var account models.Account
 
 	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
+		return
 	}
+
+	defer r.Body.Close()
 
 	acc, err := accounts.NewCreateAccount(account)
 	if err != nil {
 		responses.RespondJSON(w, http.StatusBadRequest, err)
 		return
 	}
-
-	defer r.Body.Close()
 
 	responses.RespondJSON(w, http.StatusOK, acc)
 }
@@ -35,9 +41,13 @@ func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) 
 
 	accountID := params["account_id"]
 
+	if accountID == "" {
+		responses.RespondJSON(w, http.StatusBadRequest, invalidID)
+	}
+
 	accBalance, err := accounts.ShowBalance(accountID)
 	if err != nil {
-		responses.RespondError(w, http.StatusBadRequest, err)
+		responses.RespondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -48,7 +58,8 @@ func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) 
 func (c *Controller) HandlerShowAccounts(w http.ResponseWriter, r *http.Request) {
 	accList, err := accounts.ShowListAccounts()
 	if err != nil {
-		responses.RespondError(w, http.StatusBadRequest, err)
+		responses.RespondError(w, http.StatusInternalServerError, err)
+		return
 	}
 
 	responses.RespondJSON(w, http.StatusOK, accList)
