@@ -20,14 +20,5 @@ func (u UsecaseAccount) CreateAccount(ctx context.Context, account models.Accoun
 		return models.Account{}, err
 	}
 
-	// // modelAccount := &db.FieldsToMethodsDB{
-	// // 	Accounts: acc,
-	// // }
-
-	// // accCreated, err := modelAccount.AddedAccount()
-	// // if err != nil {
-	// // 	return models.Account{}, err
-	// // }
-
 	return accCreated, nil
 }
