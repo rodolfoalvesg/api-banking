@@ -32,7 +32,7 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	responses.RespondJSON(w, http.StatusOK, acc)
+	responses.RespondJSON(w, http.StatusCreated, acc)
 }
 
 // ShowBalance, exibe o saldo
