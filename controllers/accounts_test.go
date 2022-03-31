@@ -62,7 +62,7 @@ func TestHandlerShowBalance(t *testing.T) {
 	t.Parallel()
 
 	accFake := models.Account{
-		Id:     "dfsh15hjfg4hgfsdhgdsf",
+		ID:     "dfsh15hjfg4hgfsdhgdsf",
 		Secret: "123456789",
 	}
 
@@ -72,7 +72,7 @@ func TestHandlerShowBalance(t *testing.T) {
 	controller := NewController(nil)
 
 	testShowBalance := map[string]struct {
-		accBalanceId models.Account
+		accBalanceID models.Account
 		want         int
 	}{
 		"Status OK":  {accListA, http.StatusOK},
@@ -80,15 +80,14 @@ func TestHandlerShowBalance(t *testing.T) {
 	}
 
 	for name, tt := range testShowBalance {
-		fmt.Println(tt.accBalanceId.Id)
 
-		path := fmt.Sprintf("/accounts/%s/balance", tt.accBalanceId.Id)
+		path := fmt.Sprintf("/accounts/%s/balance", tt.accBalanceID.ID)
 
 		request := httptest.NewRequest(http.MethodGet, path, nil)
 		response := httptest.NewRecorder()
 
 		vars := map[string]string{
-			"account_id": tt.accBalanceId.Id,
+			"account_id": tt.accBalanceID.ID,
 		}
 
 		request = mux.SetURLVars(request, vars)

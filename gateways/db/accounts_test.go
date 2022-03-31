@@ -12,7 +12,7 @@ func TestShowBalanceId(t *testing.T) {
 
 	t.Run("Teste: Falha", func(t *testing.T) {
 		accFakeID := FieldsToMethodsDB{}
-		_, err := accFakeID.ShowBalanceId()
+		_, err := accFakeID.ShowBalanceID()
 
 		want := fmt.Errorf("Conta não localizada")
 
@@ -23,9 +23,9 @@ func TestShowBalanceId(t *testing.T) {
 
 	t.Run("Teste: OK", func(t *testing.T) {
 		accFake := FieldsToMethodsDB{Accounts: models.Account{
-			Id:        "erwerwer74rwe4r1rwe4r58",
+			ID:        "erwerwer74rwe4r1rwe4r58",
 			Name:      "Fulano de tal",
-			Cpf:       "01254565485",
+			CPF:       "01254565485",
 			Secret:    "dsdgfgf544",
 			Balance:   2000,
 			CreatedAt: time.Now(),
@@ -33,8 +33,8 @@ func TestShowBalanceId(t *testing.T) {
 
 		accFake.AddedAccount()
 
-		accFakeID := FieldsToMethodsDB{Id: "erwerwer74rwe4r1rwe4r58"}
-		balance, _ := accFakeID.ShowBalanceId()
+		accFakeID := FieldsToMethodsDB{ID: "erwerwer74rwe4r1rwe4r58"}
+		balance, _ := accFakeID.ShowBalanceID()
 		want := 2000
 
 		if balance.Balance != want {

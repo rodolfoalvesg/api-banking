@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/domain/models"
+	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
 )
 
@@ -41,17 +42,13 @@ func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) 
 
 	accountID := params["account_id"]
 
-	if accountID == "" {
+	if len(accountID) == 2 {
 		responses.RespondJSON(w, http.StatusBadRequest, invalidID)
 	}
 
-	accBalance, err := accounts.ShowBalance(accountID)
-	if err != nil {
-		responses.RespondError(w, http.StatusInternalServerError, err)
-		return
-	}
+	accBalance := &db.FieldsToMethodsDB{}
 
-	responses.RespondJSON(w, http.StatusOK, accBalance)
+	responses.RespondJSON(w, http.StatusOK, accBalance.Balance)
 }
 
 // ShowAccounts, lista as contas

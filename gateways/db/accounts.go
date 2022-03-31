@@ -19,10 +19,10 @@ func (f *FieldsToMethodsDB) AddedAccount() (models.Account, error) {
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
-func (f *FieldsToMethodsDB) ShowBalanceId() (models.Account, error) {
+func (f *FieldsToMethodsDB) ShowBalanceID() (models.Account, error) {
 
 	for _, account := range baseAccounts {
-		if f.Id == account.Id {
+		if f.ID == account.ID {
 			return account, nil
 		}
 	}
@@ -37,7 +37,7 @@ func (f *FieldsToMethodsDB) ShowAccounts() ([]models.Account, error) {
 // findDocument Procurar se existe o cpf passado
 func (f *FieldsToMethodsDB) FindDocument() (models.Account, error) {
 	for _, document := range baseAccounts {
-		if f.Cpf == document.Cpf {
+		if f.CPF == document.CPF {
 			return document, nil
 		}
 	}

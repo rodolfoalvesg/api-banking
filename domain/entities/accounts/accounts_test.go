@@ -12,7 +12,7 @@ import (
 func TestCreateAccount(t *testing.T) {
 	var accountFakeA = models.Account{
 		Name:    "Rodolfo Alves",
-		Cpf:     "12345678900",
+		CPF:     "12345678900",
 		Secret:  "01470258",
 		Balance: 25000,
 	}
@@ -41,35 +41,6 @@ func TestCreateAccount(t *testing.T) {
 }
 
 // TestShowBalance, teste de busca de saldo
-func TestShowBalance(t *testing.T) {
-
-	accFake := models.Account{
-		Id:      "dfsh15hjfg4hgfsdhgdsf",
-		Secret:  "123456789",
-		Balance: 5000,
-	}
-
-	accListA, _ := NewCreateAccount(accFake)
-	accListB := models.Account{}
-
-	t.Run("Listando saldo: Id preenchido", func(t *testing.T) {
-		accIdBalance := accListA.Id
-		got, _ := ShowBalance(accIdBalance)
-		want := 5000
-		if got != want {
-			t.Errorf("got %v, want %v", got, want)
-		}
-	})
-
-	t.Run("Listando saldo: Id vazio", func(t *testing.T) {
-		accIdBalance := accListB.Id
-		_, err := ShowBalance(accIdBalance)
-		want := fmt.Errorf("O id não pode ser vazio")
-		if err == want {
-			t.Errorf("got %v, want %v", err, want)
-		}
-	})
-}
 
 // TestShowListAccounts, teste de listagemd e contas
 func TestShowListAccounts(t *testing.T) {
@@ -78,7 +49,7 @@ func TestShowListAccounts(t *testing.T) {
 
 	accFake := models.Account{
 		Name:   "Rodolfo",
-		Cpf:    "01470225825",
+		CPF:    "01470225825",
 		Secret: "123456123",
 	}
 

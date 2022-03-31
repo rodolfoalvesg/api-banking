@@ -4,15 +4,15 @@ import "github.com/rodolfoalvesg/api-banking/api/domain/models"
 
 type Database interface {
 	AddedAccount() (models.Account, error)
-	ShowBalanceId() (models.Account, error)
+	ShowBalanceID() (models.Account, error)
 	ShowAccounts() ([]models.Account, error)
 	FindDocument() (models.Account, error)
 }
 
 type FieldsToMethodsDB struct {
 	Accounts models.Account
-	Id       string
-	Cpf      string
+	ID       string
+	CPF      string
 	Balance  int `json:"balance,omitempty"`
 }
 

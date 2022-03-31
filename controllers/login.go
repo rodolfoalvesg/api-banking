@@ -40,10 +40,10 @@ func (c *Controller) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := security.CreateToken(verifyDocument.Id)
+	token, err := security.CreateToken(verifyDocument.ID)
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
 	}
 
-	responses.RespondJSON(w, http.StatusOK, models.Authentication{ID: verifyDocument.Id, Token: token})
+	responses.RespondJSON(w, http.StatusOK, models.Authentication{ID: verifyDocument.ID, Token: token})
 }

@@ -5,10 +5,18 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/rodolfoalvesg/api-banking/api/domain/models"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/security"
 )
+
+type Account struct {
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	CPF       string    `json:"cpf"`
+	Secret    string    `json:"secret"`
+	Balance   int       `json:"balance"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+}
 
 var (
 	ErrInvalidPassword = errors.New("A senha nao atende aos requisitos")
@@ -16,35 +24,31 @@ var (
 )
 
 // CreateAccount,
-func NewCreateAccount(acc models.Account) (models.Account, error) {
+func (acc Account) CreateNewAccount() (Account, error) {
 
 	if (len(acc.Secret) < 8) || (acc.Secret == "") {
-		return models.Account{}, ErrInvalidPassword
+		return Account{}, ErrInvalidPassword
 	}
 
 	passwdHash, err := security.SecurityHash(acc.Secret) //Cria um hash da senha passada
 	if err != nil {
-		return models.Account{}, err
+		return Account{}, err
 	}
 
 	acc.Secret = string(passwdHash)  //account.Secret, atribui ao campo de senha do modelo o HASH
-	acc.Id = uuid.New().String()     //account.Id, cria um id único e atribui ao campo Id
+	acc.ID = uuid.New().String()     //account.Id, cria um id único e atribui ao campo Id
 	acc.CreatedAt = time.Now().UTC() //account.CreatedAt, data e hora
 
 	return acc, nil
 }
 
-func ShowBalance(accID string) (int, error) {
+func NewShowBalance(accID string) (int, error) {
 
-	if len(accID) == 0 {
-		return 0, ErrInvalidID
+	modelListID := &db.FieldsToMethodsDB{
+		ID: accID,
 	}
 
-	modelListId := &db.FieldsToMethodsDB{
-		Id: accID,
-	}
-
-	accountPerson, err := modelListId.ShowBalanceId()
+	accountPerson, err := modelListID.ShowBalanceID()
 	if err != nil {
 		return 0, err
 	}
@@ -56,7 +60,7 @@ func ShowBalance(accID string) (int, error) {
 	return responseAccount.Balance, nil
 }
 
-func ShowListAccounts() ([]models.Account, error) {
+func ShowListAccounts() ([]Account, error) {
 	modelShowAccounts := &db.FieldsToMethodsDB{}
 	accountLits, err := modelShowAccounts.ShowAccounts()
 	if err != nil {
