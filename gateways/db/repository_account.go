@@ -2,17 +2,19 @@ package db
 
 import "github.com/rodolfoalvesg/api-banking/api/domain/models"
 
+// Database, metódos do banco de dados
 type Database interface {
 	AddedAccount() (models.Account, error)
-	ShowBalanceID() (models.Account, error)
+	ShowBalanceId() (models.Account, error)
 	ShowAccounts() ([]models.Account, error)
 	FindDocument() (models.Account, error)
 }
 
+// FieldsToMethodsDB, campos modelos p/ metódos
 type FieldsToMethodsDB struct {
 	Accounts models.Account
-	ID       string
-	CPF      string
+	Id       string
+	Cpf      string
 	Balance  int `json:"balance,omitempty"`
 }
 
