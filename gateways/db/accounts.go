@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"errors"
 
 	"github.com/rodolfoalvesg/api-banking/api/domain/models"
@@ -13,7 +14,7 @@ var (
 var baseAccounts = []models.Account{}
 
 // addedAccount, insere a conta no banco
-func (f *FieldsToMethodsDB) AddedAccount() (models.Account, error) {
+func (f *FieldsToMethodsDB) AddedAccount(ctx context.Context) (models.Account, error) {
 	baseAccounts = append(baseAccounts, f.Accounts)
 	return baseAccounts[len(baseAccounts)-1], nil
 }
@@ -22,7 +23,7 @@ func (f *FieldsToMethodsDB) AddedAccount() (models.Account, error) {
 func (f *FieldsToMethodsDB) ShowBalanceID() (models.Account, error) {
 
 	for _, account := range baseAccounts {
-		if f.ID == account.ID {
+		if f.Id == account.ID {
 			return account, nil
 		}
 	}
@@ -37,7 +38,7 @@ func (f *FieldsToMethodsDB) ShowAccounts() ([]models.Account, error) {
 // findDocument Procurar se existe o cpf passado
 func (f *FieldsToMethodsDB) FindDocument() (models.Account, error) {
 	for _, document := range baseAccounts {
-		if f.CPF == document.CPF {
+		if f.Cpf == document.CPF {
 			return document, nil
 		}
 	}
