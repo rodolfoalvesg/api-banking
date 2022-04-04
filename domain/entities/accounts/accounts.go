@@ -1,38 +1,33 @@
 package accounts
 
 import (
+	"context"
 	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/rodolfoalvesg/api-banking/api/domain/models"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/security"
 )
-
-type Account struct {
-	ID        string    `json:"id"`
-	Name      string    `json:"name"`
-	CPF       string    `json:"cpf"`
-	Secret    string    `json:"secret"`
-	Balance   int       `json:"balance"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
-}
 
 var (
 	ErrInvalidPassword = errors.New("A senha nao atende aos requisitos")
 	ErrInvalidID       = errors.New("É preciso um ID válido como parâmetro")
 )
 
-// CreateAccount,
-func (acc Account) CreateNewAccount() (Account, error) {
+// CreateAccount, verifica as regras da conta
+func CreateNewAccount(ctx context.Context, acc models.Account) (models.Account, error) {
 
-	if (len(acc.Secret) < 8) || (acc.Secret == "") {
-		return Account{}, ErrInvalidPassword
+	// Analisa se a senha atende os critérios
+	if len(acc.Secret) < 8 {
+		return models.Account{}, ErrInvalidPassword
 	}
 
-	passwdHash, err := security.SecurityHash(acc.Secret) //Cria um hash da senha passada
+	//Cria um hash da senha passada
+	passwdHash, err := security.SecurityHash(acc.Secret)
 	if err != nil {
-		return Account{}, err
+		return models.Account{}, err
 	}
 
 	acc.Secret = string(passwdHash)  //account.Secret, atribui ao campo de senha do modelo o HASH
@@ -42,13 +37,17 @@ func (acc Account) CreateNewAccount() (Account, error) {
 	return acc, nil
 }
 
-func NewShowBalance(accID string) (int, error) {
+func ShowBalance(accID string) (int, error) {
 
-	modelListID := &db.FieldsToMethodsDB{
-		ID: accID,
+	if len(accID) == 0 {
+		return 0, ErrInvalidID
 	}
 
-	accountPerson, err := modelListID.ShowBalanceID()
+	modelListId := &db.FieldsToMethodsDB{
+		Id: accID,
+	}
+
+	accountPerson, err := modelListId.ShowBalanceID()
 	if err != nil {
 		return 0, err
 	}
@@ -60,7 +59,7 @@ func NewShowBalance(accID string) (int, error) {
 	return responseAccount.Balance, nil
 }
 
-func ShowListAccounts() ([]Account, error) {
+func ShowListAccounts() ([]models.Account, error) {
 	modelShowAccounts := &db.FieldsToMethodsDB{}
 	accountLits, err := modelShowAccounts.ShowAccounts()
 	if err != nil {
