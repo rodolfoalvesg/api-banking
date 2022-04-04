@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"net/http"
-
-	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
 )
 
 type Controls interface {
@@ -11,8 +9,9 @@ type Controls interface {
 	HandlerShowBalance(http.ResponseWriter, *http.Request)
 	HandlerShowAccounts(http.ResponseWriter, *http.Request)
 }
+
 type Controller struct{}
 
-func NewController(db db.Database) *Controller {
+func NewController(c Controls) *Controller {
 	return &Controller{}
 }
