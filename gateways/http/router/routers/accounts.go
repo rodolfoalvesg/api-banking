@@ -4,10 +4,9 @@ import (
 	"net/http"
 
 	"github.com/rodolfoalvesg/api-banking/api/controllers"
-	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
 )
 
-var controller = controllers.NewController(&db.FieldsToMethodsDB{})
+var controller = controllers.NewController(&controllers.Controller{})
 
 var accountRouters = []Router{
 	{
