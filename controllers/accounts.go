@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/domain/models"
-	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
+	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
 )
 
@@ -16,24 +16,27 @@ var (
 	invalidID = errors.New("ID vazio, favor informar um id válido")
 )
 
+var repository accounts.AccountRepository
+var repo = account.NewUsecaseAccount(repository)
+
 // CreateAccount cria uma conta
 func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request) {
-	var account models.Account
+	var acc models.Account
 
-	if err := json.NewDecoder(r.Body).Decode(&account); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&acc); err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 		return
 	}
 
 	defer r.Body.Close()
 
-	acc, err := accounts.NewCreateAccount(account)
+	accCreated, err := repo.CreateAccount(r.Context(), acc)
 	if err != nil {
 		responses.RespondJSON(w, http.StatusBadRequest, err)
 		return
 	}
 
-	responses.RespondJSON(w, http.StatusCreated, acc)
+	responses.RespondJSON(w, http.StatusCreated, accCreated)
 }
 
 // ShowBalance, exibe o saldo
@@ -42,13 +45,17 @@ func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) 
 
 	accountID := params["account_id"]
 
-	if len(accountID) == 2 {
+	if accountID == "" {
 		responses.RespondJSON(w, http.StatusBadRequest, invalidID)
 	}
 
-	accBalance := &db.FieldsToMethodsDB{}
+	accBalance, err := accounts.ShowBalance(accountID)
+	if err != nil {
+		responses.RespondError(w, http.StatusInternalServerError, err)
+		return
+	}
 
-	responses.RespondJSON(w, http.StatusOK, accBalance.Balance)
+	responses.RespondJSON(w, http.StatusOK, accBalance)
 }
 
 // ShowAccounts, lista as contas
