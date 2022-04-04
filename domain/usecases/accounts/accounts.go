@@ -5,28 +5,25 @@ import (
 
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/domain/models"
+	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
 )
 
+var database db.Database
+var dba = db.NewRepositoryDB(database)
+
 func (u UsecaseAccount) CreateAccount(ctx context.Context, account models.Account) (models.Account, error) {
-	_, err := accounts.NewCreateAccount(account)
+	acc, err := accounts.CreateNewAccount(ctx, account)
+
 	if err != nil {
 		return models.Account{}, err
 	}
 
-	accCreated, err := u.repository.AddedAccount()
+	dba.Accounts = acc // Salva a conta no campo Accounts do dbFields
+
+	accCreated, err := dba.AddedAccount(ctx)
 	if err != nil {
 		return models.Account{}, err
 	}
 
 	return accCreated, nil
-}
-
-func (u UsecaseAccount) ShowBalanceID(ctx context.Context, accID string) (int, error) {
-
-	valueBalance, err := u.repository.ShowBalanceByID(ctx, accID)
-	if err != nil {
-		return 0, err
-	}
-
-	return valueBalance, nil
 }
