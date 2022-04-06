@@ -2,26 +2,16 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
-	"github.com/rodolfoalvesg/api-banking/api/domain/models"
-	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
 )
 
-var (
-	invalidID = errors.New("ID vazio, favor informar um id válido")
-)
-
-var repository accounts.AccountRepository
-var repo = account.NewUsecaseAccount(repository)
-
 // CreateAccount cria uma conta
-func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request) {
-	var acc models.Account
+func (c *Controller) CreateAccount(w http.ResponseWriter, r *http.Request) {
+	var acc accounts.Account
 
 	if err := json.NewDecoder(r.Body).Decode(&acc); err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
@@ -30,7 +20,8 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 
 	defer r.Body.Close()
 
-	accCreated, err := repo.CreateAccount(r.Context(), acc)
+	fmt.Println(acc)
+	accCreated, err := c.account.CreateAccount(r.Context(), acc)
 	if err != nil {
 		responses.RespondJSON(w, http.StatusBadRequest, err)
 		return
@@ -40,13 +31,13 @@ func (c *Controller) HandlerCreateAccount(w http.ResponseWriter, r *http.Request
 }
 
 // ShowBalance, exibe o saldo
-func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) {
+/*func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	accountID := params["account_id"]
 
 	if accountID == "" {
-		responses.RespondJSON(w, http.StatusBadRequest, invalidID)
+		responses.RespondJSON(w, http.StatusBadRequest, errors.New("ID vazio, favor informar um id válido"))
 	}
 
 	accBalance, err := accounts.ShowBalance(accountID)
@@ -59,7 +50,7 @@ func (c *Controller) HandlerShowBalance(w http.ResponseWriter, r *http.Request) 
 }
 
 // ShowAccounts, lista as contas
-func (c *Controller) HandlerShowAccounts(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) ShowAccounts(w http.ResponseWriter, r *http.Request) {
 	accList, err := accounts.ShowListAccounts()
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
@@ -67,4 +58,4 @@ func (c *Controller) HandlerShowAccounts(w http.ResponseWriter, r *http.Request)
 	}
 
 	responses.RespondJSON(w, http.StatusOK, accList)
-}
+}*/
