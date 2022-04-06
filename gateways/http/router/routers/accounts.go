@@ -6,25 +6,26 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/controllers"
 )
 
-var controller = controllers.NewController(&controllers.Controller{})
+func RouterAccounts(c controllers.Controller) []Router {
 
-var accountRouters = []Router{
-	{
-		URI:            "/accounts",
-		Method:         http.MethodPost,
-		Function:       controller.HandlerCreateAccount,
-		Authentication: false,
-	},
-	{
-		URI:            "/accounts/{account_id}/balance",
-		Method:         http.MethodGet,
-		Function:       controller.HandlerShowBalance,
-		Authentication: false,
-	},
-	{
-		URI:            "/accounts",
-		Method:         http.MethodGet,
-		Function:       controller.HandlerShowAccounts,
-		Authentication: false,
-	},
+	return []Router{
+		{
+			URI:            "/accounts",
+			Method:         http.MethodPost,
+			Function:       c.CreateAccount,
+			Authentication: false,
+		},
+		{
+			URI:            "/accounts/{account_id}/balance",
+			Method:         http.MethodGet,
+			Function:       nil,
+			Authentication: false,
+		},
+		{
+			URI:            "/accounts",
+			Method:         http.MethodGet,
+			Function:       nil,
+			Authentication: false,
+		},
+	}
 }

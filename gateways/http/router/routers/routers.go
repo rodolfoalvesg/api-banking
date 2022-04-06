@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rodolfoalvesg/api-banking/api/controllers"
 )
 
 type Router struct {
@@ -15,7 +16,10 @@ type Router struct {
 
 func Setup(r *mux.Router) *mux.Router {
 
-	routers := accountRouters
+	teste := RouterAccounts(controllers.Controller{})
+
+	routers := teste
+
 	routers = append(routers, loginRouter)
 	routers = append(routers, transfersRouters...)
 
