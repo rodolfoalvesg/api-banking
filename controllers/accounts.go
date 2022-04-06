@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
@@ -20,7 +19,6 @@ func (c *Controller) CreateAccount(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	fmt.Println(acc)
 	accCreated, err := c.account.CreateAccount(r.Context(), acc)
 	if err != nil {
 		responses.RespondJSON(w, http.StatusBadRequest, err)
