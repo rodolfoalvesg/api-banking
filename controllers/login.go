@@ -1,25 +1,14 @@
 package controllers
 
-import (
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
-
-	"github.com/rodolfoalvesg/api-banking/api/domain/models"
-	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
-	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
-	"github.com/rodolfoalvesg/api-banking/api/gateways/http/security"
-)
-
 // Login, cria o logon para a api
-func (c *Controller) HandlerLogin(w http.ResponseWriter, r *http.Request) {
+/*func (c *Controller) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 	bodyRequest, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.RespondError(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
-	var account models.Account
+	var account accounts.Account
 	if err := json.Unmarshal(bodyRequest, &account); err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
 		return
@@ -27,7 +16,7 @@ func (c *Controller) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	modelFindDocument := db.FieldsToMethodsDB{}
+	modelFindDocument := db.Database{}
 	verifyDocument, err := modelFindDocument.FindDocument()
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
@@ -46,4 +35,4 @@ func (c *Controller) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.RespondJSON(w, http.StatusOK, models.Authentication{ID: verifyDocument.ID, Token: token})
-}
+}*/
