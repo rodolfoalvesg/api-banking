@@ -2,46 +2,68 @@ package db
 
 import (
 	"context"
-	"errors"
-
-	"github.com/rodolfoalvesg/api-banking/api/domain/models"
+	"time"
 )
 
-var (
-	ErrNotFound = errors.New("Conta não localizada")
-)
+// Database, metódos do banco de dados
+type DatabaseMethods interface {
+	AddedAccount(ctx context.Context) (Database, error)
+	ShowBalanceId(ctx context.Context) (Database, error)
+	ShowAccounts(ctx context.Context) ([]Database, error)
+	FindDocument(ctx context.Context) (Database, error)
+}
 
-var baseAccounts = []models.Account{}
+type Database struct {
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	CPF       string    `json:"cpf"`
+	Secret    string    `json:"secret"`
+	Balance   int       `json:"balance"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+}
+
+// NewRepositoryDB, cria um novo repositório do banco
+func NewRepositoryDB(db DatabaseMethods) *Database {
+	return &Database{}
+}
 
 // addedAccount, insere a conta no banco
-func (f *FieldsToMethodsDB) AddedAccount(ctx context.Context) (models.Account, error) {
-	baseAccounts = append(baseAccounts, f.Accounts)
-	return baseAccounts[len(baseAccounts)-1], nil
+func (db *Database) AddedAccount(ctx context.Context) ([]Database, error) {
+
+	data, err := db.ShowAccounts(ctx)
+	if err != nil {
+		return []Database{}, err
+	}
+	data = append(data, *db)
+
+	return data, nil
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
-func (f *FieldsToMethodsDB) ShowBalanceID() (models.Account, error) {
+/*func (db *Database) ShowBalanceID() (accounts.Account, error) {
 
 	for _, account := range baseAccounts {
-		if f.Id == account.ID {
+		if f.ID == account.ID {
 			return account, nil
 		}
 	}
-	return models.Account{}, ErrNotFound
-}
+	return models.Account{}, errors.New("Conta não localizada")
+}*/
 
 // showAccounts, lista todas as contas
-func (f *FieldsToMethodsDB) ShowAccounts() ([]models.Account, error) {
-	return baseAccounts, nil
+func (db *Database) ShowAccounts(ctx context.Context) ([]Database, error) {
+	dataAccounts := make([]Database, 0)
+
+	return dataAccounts, nil
 }
 
 // findDocument Procurar se existe o cpf passado
-func (f *FieldsToMethodsDB) FindDocument() (models.Account, error) {
+/*func (db *Database) FindDocument() (models.Account, error) {
 	for _, document := range baseAccounts {
-		if f.Cpf == document.CPF {
+		if f.CPF == document.CPF {
 			return document, nil
 		}
 	}
 
 	return models.Account{}, nil
-}
+}*/
