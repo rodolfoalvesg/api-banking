@@ -28,7 +28,7 @@ func NewUsecaseAccount(a *db.Database) *UsecaseAccount {
 
 func (u UsecaseAccount) CreateAccount(ctx context.Context, account accounts.Account) ([]db.Database, error) {
 
-	err := account.CreateNewAccount(ctx, account)
+	passwdHash, err := accounts.ValidatePasswordHash(ctx, account)
 	if err != nil {
 		return []db.Database{}, err
 	}
@@ -37,7 +37,7 @@ func (u UsecaseAccount) CreateAccount(ctx context.Context, account accounts.Acco
 		ID:        uuid.New().String(),
 		Name:      account.Name,
 		CPF:       account.CPF,
-		Secret:    account.Secret,
+		Secret:    passwdHash,
 		Balance:   account.Balance,
 		CreatedAt: time.Now(),
 	}
