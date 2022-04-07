@@ -8,11 +8,6 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/security"
 )
 
-// AccountRepository, repositórios da entidade accounts
-type AccountRepository interface {
-	CreateNewAccount(ctx context.Context, account Account) error
-}
-
 type Account struct {
 	ID        string    `json:"id"`
 	Name      string    `json:"name"`
@@ -23,22 +18,22 @@ type Account struct {
 }
 
 // CreateAccount, verifica as regras da conta
-func (a Account) CreateNewAccount(ctx context.Context, account Account) error {
+func ValidatePasswordHash(ctx context.Context, account Account) (string, error) {
 
 	// Analisa se a senha atende os critérios
-	if len(a.Secret) < 8 {
-		return errors.New("A senha nao atende aos requisitos")
+	if len(account.Secret) < 8 {
+		return "", errors.New("A senha nao atende aos requisitos")
 	}
 
 	//Cria um hash da senha passada
-	passwdHash, err := security.SecurityHash(a.Secret)
+	passwdHash, err := security.SecurityHash(account.Secret)
 	if err != nil {
-		return errors.New("Não foi possível criar o HASH")
+		return "", errors.New("Não foi possível criar o HASH")
 	}
 
-	a.Secret = string(passwdHash) //account.Secret, atribui ao campo de senha do modelo o HASH
+	account.Secret = string(passwdHash) //account.Secret, atribui ao campo de senha do modelo o HASH
 
-	return nil
+	return account.Secret, nil
 }
 
 /*func (a Account) ShowBalance(accID string) (int, error) {
