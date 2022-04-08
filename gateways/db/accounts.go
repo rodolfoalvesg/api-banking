@@ -2,68 +2,51 @@ package db
 
 import (
 	"context"
-	"time"
+	"errors"
+
+	"github.com/google/uuid"
+	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 )
 
-// Database, metódos do banco de dados
-type DatabaseMethods interface {
-	AddedAccount(ctx context.Context) (Database, error)
-	ShowBalanceId(ctx context.Context) (Database, error)
-	ShowAccounts(ctx context.Context) ([]Database, error)
-	FindDocument(ctx context.Context) (Database, error)
-}
-
 type Database struct {
-	ID        string    `json:"id"`
-	Name      string    `json:"name"`
-	CPF       string    `json:"cpf"`
-	Secret    string    `json:"secret"`
-	Balance   int       `json:"balance"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	data map[uuid.UUID]accounts.Account
 }
 
 // NewRepositoryDB, cria um novo repositório do banco
-func NewRepositoryDB(db DatabaseMethods) *Database {
-	return &Database{}
+func NewRepository() *Database {
+	return &Database{
+		data: make(map[uuid.UUID]accounts.Account),
+	}
 }
 
 // addedAccount, insere a conta no banco
-func (db *Database) AddedAccount(ctx context.Context) ([]Database, error) {
+func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uuid.UUID, error) {
+	var uuID = uuid.New()
+	account.ID = uuID.String()
+	db.data[uuID] = account
 
-	data, err := db.ShowAccounts(ctx)
-	if err != nil {
-		return []Database{}, err
-	}
-	data = append(data, *db)
-
-	return data, nil
+	return uuID, nil
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
-/*func (db *Database) ShowBalanceID() (accounts.Account, error) {
+func (db *Database) ShowBalanceID(_ context.Context, accID string) (int, error) {
 
-	for _, account := range baseAccounts {
-		if f.ID == account.ID {
-			return account, nil
+	for _, account := range db.data {
+		if accID == account.ID {
+			return account.Balance, nil
 		}
 	}
-	return models.Account{}, errors.New("Conta não localizada")
-}*/
-
-// showAccounts, lista todas as contas
-func (db *Database) ShowAccounts(ctx context.Context) ([]Database, error) {
-	dataAccounts := make([]Database, 0)
-
-	return dataAccounts, nil
+	return -1, errors.New("Conta não localizada")
 }
 
-// findDocument Procurar se existe o cpf passado
-/*func (db *Database) FindDocument() (models.Account, error) {
-	for _, document := range baseAccounts {
-		if f.CPF == document.CPF {
-			return document, nil
-		}
+// showAccounts, lista todas as contas
+func (db *Database) ShowAccounts(_ context.Context) ([]accounts.Account, error) {
+
+	var accountsList []accounts.Account
+
+	for _, account := range db.data {
+		accountsList = append(accountsList, account)
 	}
 
-	return models.Account{}, nil
-}*/
+	return accountsList, nil
+}
