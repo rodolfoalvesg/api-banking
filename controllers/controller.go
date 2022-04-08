@@ -1,21 +1,24 @@
 package controllers
 
 import (
-	"net/http"
+	"context"
 
-	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
+	"github.com/google/uuid"
+	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 )
 
-type Controls interface {
-	CreateAccount(http.ResponseWriter, *http.Request)
-	ShowBalance(http.ResponseWriter, *http.Request)
-	ShowAccounts(http.ResponseWriter, *http.Request)
+type Controllers interface {
+	CreateAccount(ctx context.Context, account accounts.Account) (uuid.UUID, error)
+	ShowAccounts(ctx context.Context) ([]accounts.Account, error)
+	ShowBalance(ctx context.Context, accID string) (int, error)
 }
 
 type Controller struct {
-	account account.UsecaseAccount
+	account Controllers
 }
 
-func NewController(c account.UsecaseAccount) *Controller {
-	return &Controller{}
+func NewController(c Controllers) *Controller {
+	return &Controller{
+		account: c,
+	}
 }
