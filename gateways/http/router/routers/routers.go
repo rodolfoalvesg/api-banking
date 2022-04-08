@@ -14,14 +14,14 @@ type Router struct {
 	Authentication bool
 }
 
-func Setup(r *mux.Router) *mux.Router {
+func Setup(r *mux.Router, c *controllers.Controller) *mux.Router {
 
-	teste := RouterAccounts(controllers.Controller{})
+	teste := RouterAccounts(*c)
 
 	routers := teste
 
 	routers = append(routers, loginRouter)
-	routers = append(routers, transfersRouters...)
+	//routers = append(routers, transfersRouters...)
 
 	for _, router := range routers {
 		r.HandleFunc(router.URI, router.Function).Methods(router.Method)

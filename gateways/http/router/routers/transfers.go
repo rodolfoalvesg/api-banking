@@ -2,21 +2,19 @@ package routers
 
 import (
 	"net/http"
-
-	"github.com/rodolfoalvesg/api-banking/api/controllers"
 )
 
 var transfersRouters = []Router{
 	{
 		URI:            "/transfers",
 		Method:         http.MethodPost,
-		Function:       controllers.HandleTransfers,
+		Function:       nil,
 		Authentication: false,
 	},
 	{
 		URI:            "/transfers",
 		Method:         http.MethodGet,
-		Function:       controllers.ShowTransfers,
+		Function:       nil,
 		Authentication: false,
 	},
 }

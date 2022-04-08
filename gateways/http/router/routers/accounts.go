@@ -18,13 +18,13 @@ func RouterAccounts(c controllers.Controller) []Router {
 		{
 			URI:            "/accounts/{account_id}/balance",
 			Method:         http.MethodGet,
-			Function:       nil,
+			Function:       c.ShowBalance,
 			Authentication: false,
 		},
 		{
 			URI:            "/accounts",
 			Method:         http.MethodGet,
-			Function:       nil,
+			Function:       c.ShowAccounts,
 			Authentication: false,
 		},
 	}
