@@ -11,7 +11,7 @@ func (u Usecase) ShowBalance(ctx context.Context, accID string) (int, error) {
 		return 0, errors.New("É preciso um ID válido como parâmetro")
 	}
 
-	accBalance, err := u.repo.ShowBalanceID(ctx, accID)
+	accBalance, err := u.repo.ListBalanceByID(ctx, accID)
 	if err != nil {
 		return 0, err
 	}

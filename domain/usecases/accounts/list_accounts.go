@@ -8,7 +8,7 @@ import (
 )
 
 func (u Usecase) ShowAccounts(ctx context.Context) ([]accounts.Account, error) {
-	accountLits, err := u.repo.ShowAccounts(ctx)
+	accountLits, err := u.repo.ListAllAccounts(ctx)
 	if err != nil {
 		return []accounts.Account{}, fmt.Errorf("Error showing accounts: %v", err)
 	}
