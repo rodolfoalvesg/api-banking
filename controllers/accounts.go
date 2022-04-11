@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -23,7 +24,7 @@ func (c *Controller) CreateAccount(w http.ResponseWriter, r *http.Request) {
 
 	// Analisa se a senha atende os critérios
 	if len(acc.Secret) < 8 {
-		responses.RespondError(w, http.StatusFailedDependency, errors.New("A senha nao atende aos requisitos"))
+		responses.RespondError(w, http.StatusFailedDependency, fmt.Errorf("password must be at least 8 characters long"))
 		return
 	}
 
@@ -42,7 +43,7 @@ func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 	accountID := params["account_id"]
 
 	if accountID == "" {
-		responses.RespondJSON(w, http.StatusBadRequest, errors.New("ID vazio, favor informar um id válido"))
+		responses.RespondJSON(w, http.StatusBadRequest, errors.New("ID cannot be empty."))
 	}
 
 	accBalance, err := c.account.ShowBalance(r.Context(), accountID)
