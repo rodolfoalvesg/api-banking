@@ -6,7 +6,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
+	usecase "github.com/rodolfoalvesg/api-banking/api/domain/usecases"
 )
+
+var _ usecase.Repository = (*Database)(nil)
 
 type Database struct {
 	data map[uuid.UUID]accounts.Account
