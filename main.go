@@ -20,6 +20,6 @@ func main() {
 	controller := controllers.NewController(usecase)
 	r := router.CreateRouters(controller)
 
-	fmt.Printf("Escutando servidor %d\n", config.Port)
+	fmt.Printf("Listening server %d\n", config.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Port), r))
 }
