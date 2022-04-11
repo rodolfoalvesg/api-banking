@@ -29,7 +29,7 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
-func (db *Database) ShowBalanceID(_ context.Context, accID string) (int, error) {
+func (db *Database) ListBalanceByID(_ context.Context, accID string) (int, error) {
 
 	for _, account := range db.data {
 		if accID == account.ID {
@@ -40,7 +40,7 @@ func (db *Database) ShowBalanceID(_ context.Context, accID string) (int, error) 
 }
 
 // showAccounts, lista todas as contas
-func (db *Database) ShowAccounts(_ context.Context) ([]accounts.Account, error) {
+func (db *Database) ListAllAccounts(_ context.Context) ([]accounts.Account, error) {
 
 	var accountsList []accounts.Account
 
