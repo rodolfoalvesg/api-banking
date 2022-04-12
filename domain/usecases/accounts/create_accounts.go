@@ -23,7 +23,7 @@ func NewUsecase(repo usecase.Repository) *Usecase {
 
 func (u Usecase) CreateAccount(ctx context.Context, account accounts.Account) (uuid.UUID, error) {
 
-	acc, err := accounts.ValidatePasswdHash(ctx, account)
+	acc, err := accounts.GeneratePasswdHash(ctx, account)
 	if err != nil {
 		return uuid.UUID{}, fmt.Errorf("Failed to validate password hash: %w", err)
 	}
