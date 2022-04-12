@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
@@ -25,6 +26,11 @@ func NewRepository() *Database {
 // addedAccount, insere a conta no banco
 func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uuid.UUID, error) {
 	var uuID = uuid.New()
+
+	if _, ok := db.data[uuID]; ok {
+		return uuID, fmt.Errorf("ID already exists!")
+	}
+
 	account.ID = uuID.String()
 	db.data[uuID] = account
 
@@ -32,14 +38,13 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 }
 
 // showBalanceId, exibe o saldo da conta, pelo id.
-func (db *Database) ListBalanceByID(_ context.Context, accID string) (int, error) {
+func (db *Database) ListBalanceByID(_ context.Context, accID uuid.UUID) (int, error) {
 
-	for _, account := range db.data {
-		if accID == account.ID {
-			return account.Balance, nil
-		}
+	if balance, ok := db.data[accID]; ok {
+		return balance.Balance, nil
 	}
-	return -1, errors.New("Conta não localizada")
+
+	return 0, errors.New("Account not found")
 }
 
 // showAccounts, lista todas as contas
