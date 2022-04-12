@@ -18,7 +18,7 @@ type Account struct {
 }
 
 // CreateAccount, verifica as regras da conta
-func ValidatePasswdHash(ctx context.Context, account Account) ([]byte, error) {
+func GeneratePasswdHash(ctx context.Context, account Account) ([]byte, error) {
 
 	// Analisa se a senha atende os critérios
 	if len(account.Secret) < 8 {
