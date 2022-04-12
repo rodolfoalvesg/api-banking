@@ -6,20 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
-	usecase "github.com/rodolfoalvesg/api-banking/api/domain/usecases"
 )
-
-type Usecase struct {
-	repo usecase.Repository
-}
-
-//NewUsecaseAccount, cria repositório com metódos das entidades
-func NewUsecase(repo usecase.Repository) *Usecase {
-	return &Usecase{
-		repo: repo,
-	}
-
-}
 
 func (u Usecase) CreateAccount(ctx context.Context, account accounts.Account) (uuid.UUID, error) {
 
