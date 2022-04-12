@@ -3,9 +3,11 @@ package account
 import (
 	"context"
 	"errors"
+
+	"github.com/google/uuid"
 )
 
-func (u Usecase) ShowBalance(ctx context.Context, accID string) (int, error) {
+func (u Usecase) ShowBalance(ctx context.Context, accID uuid.UUID) (int, error) {
 
 	if len(accID) == 0 {
 		return 0, errors.New("É preciso um ID válido como parâmetro")
