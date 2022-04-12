@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
@@ -35,6 +36,7 @@ func (c *Controller) CreateAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.RespondJSON(w, http.StatusCreated, accCreated)
+
 }
 
 // ShowBalance, exibe o saldo
@@ -44,9 +46,10 @@ func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 
 	if accountID == "" {
 		responses.RespondJSON(w, http.StatusBadRequest, errors.New("ID cannot be empty."))
+		return
 	}
 
-	accBalance, err := c.account.ShowBalance(r.Context(), accountID)
+	accBalance, err := c.account.ShowBalance(r.Context(), uuid.MustParse(accountID))
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
 		return

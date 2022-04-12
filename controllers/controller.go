@@ -10,7 +10,7 @@ import (
 type Controllers interface {
 	CreateAccount(ctx context.Context, account accounts.Account) (uuid.UUID, error)
 	ShowAccounts(ctx context.Context) ([]accounts.Account, error)
-	ShowBalance(ctx context.Context, accID string) (int, error)
+	ShowBalance(ctx context.Context, accID uuid.UUID) (int, error)
 }
 
 type Controller struct {
