@@ -17,6 +17,9 @@ func (u Usecase) CreateAccount(ctx context.Context, account accounts.Account) (u
 
 	account.Secret = string(acc)
 
+	fmt.Println("Aqui Usecase")
+
+	fmt.Println(account)
 	accID, err := u.repo.SaveAccount(ctx, account)
 	if err != nil {
 		return uuid.UUID{}, fmt.Errorf("Failed to saving account: %w", err)
