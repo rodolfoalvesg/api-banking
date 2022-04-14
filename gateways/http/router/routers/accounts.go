@@ -12,19 +12,19 @@ func RouterAccounts(c controllers.Controller) []Router {
 		{
 			URI:            "/accounts",
 			Method:         http.MethodPost,
-			Function:       c.CreateAccount,
+			Function:       c.CreateAccountHandler,
 			Authentication: false,
 		},
 		{
 			URI:            "/accounts/{account_id}/balance",
 			Method:         http.MethodGet,
-			Function:       c.ShowBalance,
+			Function:       c.ShowBalanceHandler,
 			Authentication: false,
 		},
 		{
 			URI:            "/accounts",
 			Method:         http.MethodGet,
-			Function:       c.ShowAccounts,
+			Function:       c.ShowAccountsHandler,
 			Authentication: false,
 		},
 	}
