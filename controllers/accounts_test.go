@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,27 +11,17 @@ import (
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
-	"github.com/rodolfoalvesg/api-banking/api/gateways/db"
-	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
 )
-
-// TestCreateAccount, teste do handler de criação de conta
-type AccountRequest struct {
-	Name    string `json:"name"`
-	CPF     string `json:"cpf"`
-	Secret  string `json:"secret"`
-	Balance int    `json:"balance"`
-}
 
 func TestCreateAccount(t *testing.T) {
 	t.Parallel()
 
 	type TestCase struct {
 		Name           string
-		accountMock    account.AccountMock
+		accountMock    account.UseCaseMock
 		bodyAcc        interface{}
-		want           uuid.UUID
 		wantStatusCode int
+		want           uuid.UUID
 	}
 
 	myAccount := accounts.Account{
@@ -42,28 +31,22 @@ func TestCreateAccount(t *testing.T) {
 		Balance: 25000,
 	}
 
-	accID, _ := db.NewRepository().SaveAccount(context.TODO(), myAccount)
-
+	var accID = uuid.New()
 	tests := []TestCase{
 		{
 			Name: "Account created successfully",
-			accountMock: account.AccountMock{
-				CreateM: func(acc accounts.Account) (uuid.UUID, error) {
+			accountMock: account.UseCaseMock{
+				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
 					return accID, nil
 				},
 			},
-			bodyAcc: AccountRequest{
-				Name:    myAccount.Name,
-				CPF:     myAccount.CPF,
-				Secret:  myAccount.Secret,
-				Balance: myAccount.Balance,
-			},
-			wantStatusCode: http.StatusOK,
+			bodyAcc:        myAccount,
+			wantStatusCode: http.StatusCreated,
 			want:           accID,
 		}, {
 			Name: "Account not created",
-			accountMock: account.AccountMock{
-				CreateM: func(acc accounts.Account) (uuid.UUID, error) {
+			accountMock: account.UseCaseMock{
+				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
 					return accID, nil
 				},
 			},
@@ -73,25 +56,29 @@ func TestCreateAccount(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
+	for _, tc := range tests {
+		tt := tc
 		t.Run(tt.Name, func(t *testing.T) {
 			t.Parallel()
 
-			handler := NewController(account.Usecase{})
+			handler := NewController(&account.UseCaseMock{
+				SaveAccount: tt.accountMock.SaveAccount,
+			})
 
 			path := fmt.Sprintf("/accounts")
 			jsonBodyAcc, _ := json.Marshal(tt.bodyAcc)
 			req := bytes.NewReader(jsonBodyAcc)
-			request := httptest.NewRequest(http.MethodPost, path, req)
-			response := httptest.NewRecorder()
+			w := httptest.NewRecorder()
+			r := httptest.NewRequest(http.MethodPost, path, req)
 
-			http.HandlerFunc(handler.CreateAccount).ServeHTTP(response, request)
+			http.HandlerFunc(handler.CreateAccountHandler).ServeHTTP(w, r)
 
-			responses.RespondJSON(response, tt.wantStatusCode, response.Code)
+			if w.Code != tt.wantStatusCode {
+				t.Errorf("%s: got %v, want %v", tt.Name, tt.wantStatusCode, w.Code)
+			}
 
 		})
 	}
-
 }
 
 /*
