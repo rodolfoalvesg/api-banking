@@ -13,7 +13,7 @@ import (
 )
 
 // CreateAccount cria uma conta
-func (c *Controller) CreateAccount(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	var acc accounts.Account
 
 	if err := json.NewDecoder(r.Body).Decode(&acc); err != nil {
@@ -40,7 +40,7 @@ func (c *Controller) CreateAccount(w http.ResponseWriter, r *http.Request) {
 }
 
 // ShowBalance, exibe o saldo
-func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) ShowBalanceHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	accountID := params["account_id"]
 
@@ -59,7 +59,7 @@ func (c *Controller) ShowBalance(w http.ResponseWriter, r *http.Request) {
 }
 
 // ShowAccounts, lista as contas
-func (c *Controller) ShowAccounts(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) ShowAccountsHandler(w http.ResponseWriter, r *http.Request) {
 	accList, err := c.account.ShowAccounts(r.Context())
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
