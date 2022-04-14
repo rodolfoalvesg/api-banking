@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
@@ -32,6 +33,7 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 	}
 
 	account.ID = uuID.String()
+	account.CreatedAt = time.Now().UTC()
 	db.data[uuID] = account
 
 	return uuID, nil
