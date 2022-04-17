@@ -44,12 +44,16 @@ func (c *Controller) ShowBalanceHandler(w http.ResponseWriter, r *http.Request) 
 	params := mux.Vars(r)
 	accountID := params["account_id"]
 
-	if accountID == "" {
+	fmt.Println(accountID)
+
+	if accountID == "00000000-0000-0000-0000-000000000000" {
 		responses.RespondJSON(w, http.StatusBadRequest, errors.New("ID cannot be empty."))
 		return
 	}
 
-	accBalance, err := c.account.ShowBalance(r.Context(), uuid.MustParse(accountID))
+	accID := uuid.MustParse(accountID)
+
+	accBalance, err := c.account.ShowBalance(r.Context(), accID)
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
 		return
