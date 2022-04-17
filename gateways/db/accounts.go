@@ -29,7 +29,7 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 	var uuID = uuid.New()
 
 	if _, ok := db.data[uuID]; ok {
-		return uuID, fmt.Errorf("ID already exists!")
+		return uuid.UUID{}, fmt.Errorf("ID already exists!")
 	}
 
 	account.ID = uuID.String()
