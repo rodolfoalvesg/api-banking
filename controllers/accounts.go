@@ -12,7 +12,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
 )
 
-// CreateAccount cria uma conta
+// CreateAccountHandler, cria uma requisição para criação de conta
 func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request) {
 	var acc accounts.Account
 
@@ -31,7 +31,7 @@ func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request
 
 	accCreated, err := c.account.CreateAccount(r.Context(), acc)
 	if err != nil {
-		responses.RespondJSON(w, http.StatusBadRequest, err)
+		responses.RespondJSON(w, http.StatusConflict, err)
 		return
 	}
 
@@ -39,12 +39,10 @@ func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request
 
 }
 
-// ShowBalance, exibe o saldo
+// ShowBalanceHandler, cria uma requisição para listar um saldo
 func (c *Controller) ShowBalanceHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	accountID := params["account_id"]
-
-	fmt.Println(accountID)
 
 	if accountID == "00000000-0000-0000-0000-000000000000" {
 		responses.RespondJSON(w, http.StatusBadRequest, errors.New("ID cannot be empty."))
@@ -55,14 +53,14 @@ func (c *Controller) ShowBalanceHandler(w http.ResponseWriter, r *http.Request) 
 
 	accBalance, err := c.account.ShowBalance(r.Context(), accID)
 	if err != nil {
-		responses.RespondError(w, http.StatusInternalServerError, err)
+		responses.RespondError(w, http.StatusNotFound, err)
 		return
 	}
 
 	responses.RespondJSON(w, http.StatusOK, accBalance)
 }
 
-// ShowAccounts, lista as contas
+// ShowAccountsHandler, cria uma requisição para listagem de todas as contas
 func (c *Controller) ShowAccountsHandler(w http.ResponseWriter, r *http.Request) {
 	accList, err := c.account.ShowAccounts(r.Context())
 	if err != nil {
