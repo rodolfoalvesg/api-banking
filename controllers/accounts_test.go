@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -14,7 +16,8 @@ import (
 	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
 )
 
-func TestCreateAccount(t *testing.T) {
+//TestCreateAccount, teste do handler para criação de conta
+func TestCreateAccountHandler(t *testing.T) {
 	t.Parallel()
 
 	type TestCaseA struct {
@@ -50,7 +53,7 @@ func TestCreateAccount(t *testing.T) {
 			Name: "Account not created",
 			accountMock: account.UseCaseMock{
 				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
-					return accID, nil
+					return uuid.UUID{}, nil
 				},
 			},
 			bodyAcc:        "invalid",
@@ -60,11 +63,21 @@ func TestCreateAccount(t *testing.T) {
 			Name: "Invalid password length",
 			accountMock: account.UseCaseMock{
 				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
-					return accID, nil
+					return uuid.UUID{}, nil
 				},
 			},
 			bodyAcc:        myAccountB,
 			wantStatusCode: http.StatusFailedDependency,
+			want:           uuid.UUID{},
+		}, {
+			Name: "Conflict ID",
+			accountMock: account.UseCaseMock{
+				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
+					return uuid.UUID{}, errors.New("Conflict")
+				},
+			},
+			bodyAcc:        myAccountA,
+			wantStatusCode: http.StatusConflict,
 			want:           uuid.UUID{},
 		},
 	}
@@ -87,7 +100,7 @@ func TestCreateAccount(t *testing.T) {
 			http.HandlerFunc(handler.CreateAccountHandler).ServeHTTP(w, r)
 
 			if w.Code != tt.wantStatusCode {
-				t.Errorf("%s: got %v, want %v", tt.Name, tt.wantStatusCode, w.Code)
+				t.Errorf("%s: got %v, want %v", tt.Name, w.Code, tt.wantStatusCode)
 			}
 
 		})
@@ -95,7 +108,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 //TestHandlerShowBalance, teste do handler para exibição de saldo
-func TestHandlerShowBalance(t *testing.T) {
+func TestShowBalanceHandler(t *testing.T) {
 	t.Parallel()
 
 	type TestCaseB struct {
@@ -121,7 +134,7 @@ func TestHandlerShowBalance(t *testing.T) {
 			wantStatusCode: http.StatusOK,
 			want:           balance,
 		}, {
-			Name: "Error listing balance",
+			Name: "Empty ID",
 			accountMock: account.UseCaseMock{
 				ListBalanceByID: func(uuid.UUID) (int, error) {
 					return 0, nil
@@ -129,6 +142,16 @@ func TestHandlerShowBalance(t *testing.T) {
 			},
 			accountID:      uuid.UUID{},
 			wantStatusCode: http.StatusBadRequest,
+			want:           0,
+		}, {
+			Name: "Invalid ID",
+			accountMock: account.UseCaseMock{
+				ListBalanceByID: func(uuid.UUID) (int, error) {
+					return 0, errors.New("Not Found")
+				},
+			},
+			accountID:      uuid.New(),
+			wantStatusCode: http.StatusNotFound,
 			want:           0,
 		},
 	}
@@ -155,28 +178,61 @@ func TestHandlerShowBalance(t *testing.T) {
 			http.HandlerFunc(handler.ShowBalanceHandler).ServeHTTP(w, r)
 
 			if w.Code != tt.wantStatusCode {
-				t.Errorf("%s: got %v, want %v", tt.Name, tt.wantStatusCode, w.Code)
+				t.Errorf("%s: got %v, want %v", tt.Name, w.Code, tt.wantStatusCode)
 			}
 		})
 	}
 }
 
-/*
-// TestHandlerShowAccounts, teste do handler para listagem de conta
-func TestHandlerShowAccounts(t *testing.T) {
+// TestHandlerShowAccounts, teste do handler para listagem de todas as contas
+func TestShowAccountsHandler(t *testing.T) {
 	t.Parallel()
 
-	controller := NewController(nil)
+	type TestCaseC struct {
+		Name           string
+		accountMock    account.UseCaseMock
+		wantStatusCode int
+	}
 
-	request := httptest.NewRequest(http.MethodGet, "/accounts", nil)
-	response := httptest.NewRecorder()
+	baseAccounts := []accounts.Account{}
 
-	controller.HandlerShowAccounts(response, request)
+	tests := []TestCaseC{
+		{
+			Name: "Listed Accounts",
+			accountMock: account.UseCaseMock{
+				ListAllAccounts: func(context.Context) ([]accounts.Account, error) {
+					return baseAccounts, nil
+				},
+			},
+			wantStatusCode: http.StatusOK,
+		}, {
+			Name: "Too Many Requests",
+			accountMock: account.UseCaseMock{
+				ListAllAccounts: func(context.Context) ([]accounts.Account, error) {
+					return nil, errors.New("Internal Server Error")
+				},
+			},
+			wantStatusCode: http.StatusInternalServerError,
+		},
+	}
 
-	fmt.Println(response)
+	for _, tc := range tests {
+		tt := tc
+		t.Run(tt.Name, func(t *testing.T) {
+			t.Parallel()
+			handler := NewController(&account.UseCaseMock{
+				ListAllAccounts: tt.accountMock.ListAllAccounts,
+			})
 
-	if response.Result().StatusCode != http.StatusOK {
-		t.Fail()
+			path := fmt.Sprintf("/accounts")
+			w := httptest.NewRecorder()
+			r := httptest.NewRequest(http.MethodGet, path, nil)
+
+			http.HandlerFunc(handler.ShowAccountsHandler).ServeHTTP(w, r)
+
+			if w.Code != tt.wantStatusCode {
+				t.Errorf("%s: got %v, want %v", tt.Name, tt.wantStatusCode, w.Code)
+			}
+		})
 	}
 }
-*/
