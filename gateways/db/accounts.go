@@ -17,14 +17,14 @@ type Database struct {
 	data map[uuid.UUID]accounts.Account
 }
 
-// NewRepositoryDB, cria um novo repositório do banco
+// NewRepository, cria um novo repositório do banco
 func NewRepository() *Database {
 	return &Database{
 		data: make(map[uuid.UUID]accounts.Account),
 	}
 }
 
-// addedAccount, insere a conta no banco
+// SaveAccount, insere a conta no banco
 func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uuid.UUID, error) {
 	var uuID = uuid.New()
 
@@ -39,7 +39,7 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 	return uuID, nil
 }
 
-// showBalanceId, exibe o saldo da conta, pelo id.
+// ListBalanceByID, exibe o saldo da conta, pelo id.
 func (db *Database) ListBalanceByID(_ context.Context, accID uuid.UUID) (int, error) {
 
 	if balance, ok := db.data[accID]; ok {
@@ -49,7 +49,7 @@ func (db *Database) ListBalanceByID(_ context.Context, accID uuid.UUID) (int, er
 	return 0, errors.New("Account not found")
 }
 
-// showAccounts, lista todas as contas
+// ListAllAccounts, lista todas as contas
 func (db *Database) ListAllAccounts(_ context.Context) ([]accounts.Account, error) {
 
 	var accountsList []accounts.Account
@@ -59,4 +59,18 @@ func (db *Database) ListAllAccounts(_ context.Context) ([]accounts.Account, erro
 	}
 
 	return accountsList, nil
+}
+
+// ListAccountsByCPF, lista conta pelo CPF
+func (db *Database) ListAccountsByCPF(ctx context.Context, accCPF string) (accounts.Account, error) {
+
+	listAcc, _ := db.ListAllAccounts(ctx)
+
+	for _, account := range listAcc {
+		if account.CPF == accCPF {
+			return account, nil
+		}
+	}
+
+	return accounts.Account{}, errors.New("account not found")
 }
