@@ -33,6 +33,6 @@ func (m *UseCaseMock) ShowAccounts(ctx context.Context) ([]accounts.Account, err
 	return m.ListAllAccounts(ctx)
 }
 
-func (m *UseCaseMock) NewLogin(ctx context.Context, accCPF string) (accounts.Account, error) {
-	return m.ListAccountsByCPF(accCPF)
+func (m *UseCaseMock) NewLogin(ctx context.Context, l Login) (accounts.Account, error) {
+	return m.ListAccountsByCPF(l.CPF)
 }
