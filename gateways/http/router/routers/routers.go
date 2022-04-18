@@ -16,12 +16,13 @@ type Router struct {
 
 func Setup(r *mux.Router, c *controllers.Controller) *mux.Router {
 
-	teste := RouterAccounts(*c)
+	routerAccounts := RouterAccounts(*c)
+	routerLogin := RouterLogin(*c)
+	routerTransfers := RouterTransfers(*c)
 
-	routers := teste
-
-	routers = append(routers, loginRouter)
-	//routers = append(routers, transfersRouters...)
+	routers := routerAccounts
+	routers = append(routers, routerLogin)
+	routers = append(routers, routerTransfers...)
 
 	for _, router := range routers {
 		r.HandleFunc(router.URI, router.Function).Methods(router.Method)

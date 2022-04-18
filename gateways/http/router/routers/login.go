@@ -2,10 +2,16 @@ package routers
 
 import (
 	"net/http"
+
+	"github.com/rodolfoalvesg/api-banking/api/controllers"
 )
 
-var loginRouter = Router{
-	URI:            "/login",
-	Method:         http.MethodPost,
-	Authentication: false,
+func RouterLogin(c controllers.Controller) Router {
+	return Router{
+		URI:            "/login",
+		Method:         http.MethodPost,
+		Function:       c.LoginHandler,
+		Authentication: false,
+	}
+
 }
