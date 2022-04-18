@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/rodolfoalvesg/api-banking/api/gateways/http/security"
+	"github.com/rodolfoalvesg/api-banking/api/common/security"
 )
 
 type Account struct {
