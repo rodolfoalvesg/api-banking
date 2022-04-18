@@ -20,11 +20,6 @@ type Account struct {
 // CreateAccount, verifica as regras da conta
 func GeneratePasswdHash(ctx context.Context, account Account) ([]byte, error) {
 
-	// Analisa se a senha atende os critérios
-	if len(account.Secret) < 8 {
-		return nil, errors.New("A senha nao atende aos requisitos")
-	}
-
 	//Cria um hash da senha passada
 	passwdHash, err := security.SecurityHash(account.Secret)
 	if err != nil {
