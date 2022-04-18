@@ -65,10 +65,6 @@ func TestCreateAccount(t *testing.T) {
 			if got != tt.want && err != nil {
 				t.Errorf("Error %s", err)
 			}
-
-			if got != tt.want {
-				t.Errorf("%s, want %v, got %v", tt.Name, tt.want, got)
-			}
 		})
 	}
 }
@@ -191,6 +187,7 @@ func TestShowAccounts(t *testing.T) {
 
 			listAccounts, err := usecase.ShowAccounts(context.Background())
 			if err != nil && !reflect.DeepEqual(listAccounts, tt.want) {
+				t.Errorf("%s, want %v, got %v", tt.Name, tt.want, listAccounts)
 			}
 
 		})
