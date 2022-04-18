@@ -5,12 +5,14 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
+	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
 )
 
 type Controllers interface {
 	CreateAccount(context.Context, accounts.Account) (uuid.UUID, error)
 	ShowAccounts(context.Context) ([]accounts.Account, error)
 	ShowBalance(context.Context, uuid.UUID) (int, error)
+	NewLogin(context.Context, account.Login) (accounts.Account, error)
 }
 
 type Controller struct {
