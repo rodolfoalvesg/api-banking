@@ -12,6 +12,11 @@ type Login struct {
 	Secret string `json:"secret"`
 }
 
+var (
+	ErrInvalidPasswd = errors.New("error validating password")
+	ErrCreateToken   = errors.New("error creating token")
+)
+
 func (u Usecase) NewLogin(ctx context.Context, l Login) (string, error) {
 
 	account, err := u.repo.ListAccountsByCPF(ctx, l.CPF)
@@ -21,12 +26,12 @@ func (u Usecase) NewLogin(ctx context.Context, l Login) (string, error) {
 
 	err = security.VerifyPasswd(account.Secret, l.Secret)
 	if err != nil {
-		return "", errors.New("error validating password")
+		return "", ErrInvalidPasswd
 	}
 
 	token, err := security.CreateToken(account.ID)
 	if err != nil {
-		return "", errors.New("error creating token")
+		return "", ErrCreateToken
 	}
 
 	return token, nil
