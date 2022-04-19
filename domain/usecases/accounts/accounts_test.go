@@ -120,7 +120,8 @@ func TestShowBalance(t *testing.T) {
 
 			balance, err := usecase.ShowBalance(context.Background(), tt.accFakeID)
 			if balance != tt.want && err != nil {
-				t.Errorf("Error %s", err)
+				t.Errorf("%s, got %v, want %v", tt.Name, balance, tt.want)
+
 			}
 
 		})
@@ -169,10 +170,10 @@ func TestShowAccounts(t *testing.T) {
 			Name: "Error Accounts not Listed",
 			accountMock: accounts.AccountMock{
 				ListAllAcc: func(context.Context) ([]accounts.Account, error) {
-					return nil, errors.New("Erro")
+					return []accounts.Account{}, errors.New("Erro")
 				},
 			},
-			want: nil,
+			want: []accounts.Account{},
 		},
 	}
 
@@ -186,7 +187,7 @@ func TestShowAccounts(t *testing.T) {
 			})
 
 			listAccounts, err := usecase.ShowAccounts(context.Background())
-			if err != nil && !reflect.DeepEqual(listAccounts, tt.want) {
+			if !reflect.DeepEqual(listAccounts, tt.want) && err != nil {
 				t.Errorf("%s, want %v, got %v", tt.Name, tt.want, listAccounts)
 			}
 
