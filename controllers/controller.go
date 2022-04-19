@@ -12,7 +12,7 @@ type Controllers interface {
 	CreateAccount(context.Context, accounts.Account) (uuid.UUID, error)
 	ShowAccounts(context.Context) ([]accounts.Account, error)
 	ShowBalance(context.Context, uuid.UUID) (int, error)
-	NewLogin(context.Context, account.Login) (accounts.Account, error)
+	NewLogin(context.Context, account.Login) (string, error)
 }
 
 type Controller struct {
