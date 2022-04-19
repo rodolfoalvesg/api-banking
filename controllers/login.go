@@ -25,23 +25,5 @@ func (c *Controller) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// modelFindDocument := db.Database{}
-	// verifyDocument, err := modelFindDocument.FindDocument()
-	// if err != nil {
-	// 	responses.RespondError(w, http.StatusInternalServerError, err)
-	// 	return
-	// }
-
-	// err = security.VerifyPasswd(verifyDocument.Secret, account.Secret)
-	// if err != nil {
-	// 	responses.RespondError(w, http.StatusInternalServerError, err)
-	// 	return
-	// }
-
-	// token, err := security.CreateToken(verifyDocument.ID)
-	// if err != nil {
-	// 	responses.RespondError(w, http.StatusInternalServerError, err)
-	// }
-
 	responses.RespondJSON(w, http.StatusOK, accountID)
 }
