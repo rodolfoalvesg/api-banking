@@ -2,17 +2,33 @@ package controllers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
+	"github.com/google/uuid"
+	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
 )
 
 func TestLoginHandler(t *testing.T) {
+	myAccountFake := accounts.Account{
+		ID:        uuid.New().String(),
+		Name:      "Fulano de Tal",
+		CPF:       "12345678900",
+		Secret:    "12345678",
+		Balance:   525000,
+		CreatedAt: time.Now().UTC(),
+	}
+
+	hash, _ := accounts.GeneratePasswdHash(context.Background(), myAccountFake)
+	myAccountFake.Secret = string(hash)
+
 	myLoginFake := account.Login{
 		CPF:    "12345678900",
 		Secret: "12345678",
@@ -29,8 +45,8 @@ func TestLoginHandler(t *testing.T) {
 		{
 			Name: "Login successfully",
 			loginMock: account.UseCaseMock{
-				ListAccountsByCPF: func(accCPF string) (string, error) {
-					return myLoginFake.Secret, nil
+				ListAccountsByCPF: func(accCPF string) (accounts.Account, error) {
+					return myAccountFake, nil
 				},
 			},
 			loginBody:      myLoginFake,
@@ -39,8 +55,8 @@ func TestLoginHandler(t *testing.T) {
 		{
 			Name: "Body Invalid",
 			loginMock: account.UseCaseMock{
-				ListAccountsByCPF: func(accCPF string) (string, error) {
-					return "", nil
+				ListAccountsByCPF: func(accCPF string) (accounts.Account, error) {
+					return accounts.Account{}, errors.New("Error")
 				},
 			},
 			loginBody:      "invalid",
@@ -49,8 +65,8 @@ func TestLoginHandler(t *testing.T) {
 		{
 			Name: "Login Fail",
 			loginMock: account.UseCaseMock{
-				ListAccountsByCPF: func(accCPF string) (string, error) {
-					return "", errors.New("Error")
+				ListAccountsByCPF: func(accCPF string) (accounts.Account, error) {
+					return accounts.Account{}, errors.New("Error")
 				},
 			},
 			loginBody:      myLoginFake,
