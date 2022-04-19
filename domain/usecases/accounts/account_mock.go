@@ -9,16 +9,16 @@ import (
 
 type RepositoryMock interface {
 	CreateAccount(context.Context, accounts.Account) (uuid.UUID, error)
-	ShowBalance(ctx context.Context, accID uuid.UUID) (int, error)
+	ShowBalance(context.Context, uuid.UUID) (int, error)
 	ShowAccounts(ctx context.Context) ([]accounts.Account, error)
-	NewLogin(ctx context.Context, l Login) (string, error)
+	NewLogin(context.Context, Login) (string, error)
 }
 
 type UseCaseMock struct {
 	SaveAccount       func(accounts.Account) (uuid.UUID, error)
 	ListAllAccounts   func(context.Context) ([]accounts.Account, error)
 	ListBalanceByID   func(uuid.UUID) (int, error)
-	ListAccountsByCPF func(accCPF string) (string, error)
+	ListAccountsByCPF func(string) (accounts.Account, error)
 }
 
 func (m *UseCaseMock) CreateAccount(ctx context.Context, acc accounts.Account) (uuid.UUID, error) {
@@ -34,5 +34,5 @@ func (m *UseCaseMock) ShowAccounts(ctx context.Context) ([]accounts.Account, err
 }
 
 func (m *UseCaseMock) NewLogin(ctx context.Context, l Login) (string, error) {
-	return m.ListAccountsByCPF(l.CPF)
+	return "", nil
 }
