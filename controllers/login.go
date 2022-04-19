@@ -13,7 +13,7 @@ func (c *Controller) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	var acc account.Login
 	if err := json.NewDecoder(r.Body).Decode(&acc); err != nil {
-		responses.RespondError(w, http.StatusBadRequest, err)
+		responses.RespondError(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 
