@@ -74,3 +74,17 @@ func (db *Database) ListAccountsByCPF(ctx context.Context, accCPF string) (accou
 
 	return accounts.Account{}, errors.New("account not found")
 }
+
+// ListAccountsByID, verifica a existência de uma conta pelo ID
+func (db *Database) ListAccountByID(ctx context.Context, accID string) error {
+
+	listAcc, _ := db.ListAllAccounts(ctx)
+
+	for _, account := range listAcc {
+		if account.ID == accID {
+			return errors.New("account not found")
+		}
+	}
+
+	return nil
+}
