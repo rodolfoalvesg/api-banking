@@ -11,13 +11,13 @@ func RouterTransfers(c controllers.Controller) []Router {
 		{
 			URI:            "/transfers",
 			Method:         http.MethodPost,
-			Function:       nil,
+			Function:       c.CreateTransferHandler,
 			Authentication: true,
 		},
 		{
 			URI:            "/transfers",
 			Method:         http.MethodGet,
-			Function:       nil,
+			Function:       c.ListTransferHandler,
 			Authentication: true,
 		},
 	}
