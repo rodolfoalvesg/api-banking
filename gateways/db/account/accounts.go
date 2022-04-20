@@ -1,4 +1,4 @@
-package db
+package account_db
 
 import (
 	"context"
@@ -42,8 +42,8 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 // ListBalanceByID, exibe o saldo da conta, pelo id.
 func (db *Database) ListBalanceByID(_ context.Context, accID uuid.UUID) (int, error) {
 
-	if balance, ok := db.data[accID]; ok {
-		return balance.Balance, nil
+	if acc, ok := db.data[accID]; ok {
+		return acc.Balance, nil
 	}
 
 	return 0, errors.New("Account not found")
