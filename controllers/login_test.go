@@ -81,7 +81,7 @@ func TestLoginHandler(t *testing.T) {
 
 			handler := NewController(&account.UseCaseMock{
 				ListAccountsByCPF: tt.loginMock.ListAccountsByCPF,
-			})
+			}, nil)
 
 			path := fmt.Sprintf("/login")
 			jsonLoginBody, _ := json.Marshal(tt.loginBody)
