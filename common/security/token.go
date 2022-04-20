@@ -16,8 +16,8 @@ func CreateToken(userId string) (string, error) {
 
 	permission := jwt.MapClaims{}
 	permission["authorized"] = true
-	permission["id"] = userId
-	permission["exp"] = time.Now().Add(time.Minute * 5).Unix()
+	permission["user_id"] = userId
+	permission["exp"] = time.Now().Add(time.Minute * 30).Unix()
 
 	tokenMethod := jwt.GetSigningMethod("HS256")
 	newTokenClaims := jwt.NewWithClaims(tokenMethod, permission)
@@ -46,7 +46,23 @@ func ValidateToken(r *http.Request) error {
 	return errors.New("Invalid token")
 }
 
-//extractToken, desmenbra o token
+// ExtractUserID, retona o usuário que está salvo no token
+func ExtractUserID(r *http.Request) (string, error) {
+	tokenString := extractToken(r)
+	token, err := jwt.Parse(tokenString, returnVerificationKey)
+	if err != nil {
+		return "", err
+	}
+
+	if permission, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		userID := permission["user_id"].(string)
+		return userID, nil
+	}
+
+	return "", errors.New("Invalid Token")
+}
+
+//extractToken, desmenbra o token em caso de Bearer: Bearer token..........
 func extractToken(r *http.Request) string {
 	token := r.Header.Get("Authorization")
 
