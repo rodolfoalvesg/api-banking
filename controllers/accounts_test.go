@@ -89,7 +89,7 @@ func TestCreateAccountHandler(t *testing.T) {
 
 			handler := NewController(&account.UseCaseMock{
 				SaveAccount: tt.accountMock.SaveAccount,
-			})
+			}, nil)
 
 			path := fmt.Sprintf("/accounts")
 			jsonBodyAcc, _ := json.Marshal(tt.bodyAcc)
@@ -163,7 +163,7 @@ func TestShowBalanceHandler(t *testing.T) {
 
 			handler := NewController(&account.UseCaseMock{
 				ListBalanceByID: tt.accountMock.ListBalanceByID,
-			})
+			}, nil)
 
 			path := fmt.Sprintf("/accounts/{account_id}/balance")
 			w := httptest.NewRecorder()
@@ -222,7 +222,7 @@ func TestShowAccountsHandler(t *testing.T) {
 			t.Parallel()
 			handler := NewController(&account.UseCaseMock{
 				ListAllAccounts: tt.accountMock.ListAllAccounts,
-			})
+			}, nil)
 
 			path := fmt.Sprintf("/accounts")
 			w := httptest.NewRecorder()
