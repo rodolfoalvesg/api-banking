@@ -5,10 +5,15 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
+	"github.com/rodolfoalvesg/api-banking/api/domain/entities/transfers"
 	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
 )
 
-type Controllers interface {
+type ControllersTransfers interface {
+	CreateTransfer(context.Context, transfers.Transfer) (uuid.UUID, error)
+}
+
+type ControllersAccount interface {
 	CreateAccount(context.Context, accounts.Account) (uuid.UUID, error)
 	ShowAccounts(context.Context) ([]accounts.Account, error)
 	ShowBalance(context.Context, uuid.UUID) (int, error)
@@ -16,11 +21,13 @@ type Controllers interface {
 }
 
 type Controller struct {
-	account Controllers
+	account  ControllersAccount
+	transfer ControllersTransfers
 }
 
-func NewController(c Controllers) *Controller {
+func NewController(c ControllersAccount, t ControllersTransfers) *Controller {
 	return &Controller{
-		account: c,
+		account:  c,
+		transfer: t,
 	}
 }
