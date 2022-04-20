@@ -5,6 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/rodolfoalvesg/api-banking/api/controllers"
+	"github.com/rodolfoalvesg/api-banking/api/gateways/http/middlewares"
 )
 
 type Router struct {
@@ -25,7 +26,12 @@ func Setup(r *mux.Router, c *controllers.Controller) *mux.Router {
 	routers = append(routers, routerTransfers...)
 
 	for _, router := range routers {
-		r.HandleFunc(router.URI, router.Function).Methods(router.Method)
+
+		if router.Authentication {
+			r.HandleFunc(router.URI, middlewares.Auth(router.Function)).Methods(router.Method)
+		} else {
+			r.HandleFunc(router.URI, router.Function).Methods(router.Method)
+		}
 	}
 
 	return r
