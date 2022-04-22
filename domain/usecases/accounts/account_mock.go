@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/rodolfoalvesg/api-banking/api/common/security"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/transfers"
 )
@@ -26,26 +27,42 @@ type UseCaseMock struct {
 	UpdatedAccount    func(accounts.Balance) error
 }
 
+// CreateAccount, mock caso de uso para criação de conta
 func (m *UseCaseMock) CreateAccount(ctx context.Context, acc accounts.Account) (uuid.UUID, error) {
 	return m.SaveAccount(acc)
 }
 
+// ShowBalance, mock caso de uso para exibir saldo mediante ID do usuário
 func (m *UseCaseMock) ShowBalance(ctx context.Context, accID uuid.UUID) (int, error) {
 	return m.ListBalanceByID(accID)
 }
 
+// ShowAccounts, mock caso de uso para listar todas as contas cadastradas
 func (m *UseCaseMock) ShowAccounts(ctx context.Context) ([]accounts.Account, error) {
 	return m.ListAllAccounts(ctx)
 }
 
+// NewLogin, mock caso de uso para login na api e permissão para transferências
 func (m *UseCaseMock) NewLogin(ctx context.Context, l Login) (string, error) {
-	return "", nil
+	acc, err := m.ListAccountsByCPF(l.CPF)
+	if err != nil {
+		return "", err
+	}
+
+	token, err := security.CreateToken(acc.ID)
+	if err != nil {
+		return "", ErrCreateToken
+	}
+
+	return token, nil
 }
 
+// GetAccount, mock caso de uso para checagem ou exibição de conta pelo ID do usuário
 func (m *UseCaseMock) GetAccount(_ context.Context, accID string) (accounts.Account, error) {
 	return m.ListAccountByID(accID)
 }
 
+// UpdateAccount, mock caso de uso para atualizar saldo de contas
 func (m *UseCaseMock) UpdateAccount(_ context.Context, transfer transfers.Transfer) error {
 	return m.UpdatedAccount(accounts.Balance{})
 }
