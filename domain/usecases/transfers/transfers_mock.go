@@ -8,13 +8,19 @@ import (
 )
 
 type RepositoryTransferMock interface {
-	SaveTransfer(context.Context, transfers.Transfer) (uuid.UUID, error)
+	CreateTransfer(context.Context, transfers.Transfer) (uuid.UUID, error)
+	ShowTransfers(context.Context, string) ([]transfers.Transfer, error)
 }
 
 type UseCaseTransferMock struct {
-	onCheckAcccountID func(string) error
+	SaveTransfer     func(transfers.Transfer) (uuid.UUID, error)
+	ListAllTransfers func(string) ([]transfers.Transfer, error)
 }
 
-func (m *UseCaseTransferMock) CheckAccount(accID string) error {
-	return m.onCheckAcccountID(accID)
+func (m *UseCaseTransferMock) CreateTransfer(ctx context.Context, t transfers.Transfer) (uuid.UUID, error) {
+	return m.SaveTransfer(t)
+}
+
+func (m *UseCaseTransferMock) ShowTransfers(ctx context.Context, accID string) ([]transfers.Transfer, error) {
+	return m.ListAllTransfers(accID)
 }
