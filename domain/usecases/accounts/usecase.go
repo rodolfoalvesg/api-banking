@@ -12,7 +12,8 @@ type Repository interface {
 	ListAllAccounts(context.Context) ([]accounts.Account, error)
 	ListBalanceByID(context.Context, uuid.UUID) (int, error)
 	ListAccountsByCPF(context.Context, string) (accounts.Account, error)
-	ListAccountByID(context.Context, string) error
+	ListAccountByID(context.Context, string) (accounts.Account, error)
+	UpdatedAccount(context.Context, accounts.Balance) error
 }
 
 type Usecase struct {
