@@ -19,11 +19,11 @@ func (c *Controller) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
-	accountID, err := c.account.NewLogin(r.Context(), acc)
+	tokenID, err := c.account.NewLogin(r.Context(), acc)
 	if err != nil {
 		responses.RespondError(w, http.StatusBadRequest, err)
 		return
 	}
 
-	responses.RespondJSON(w, http.StatusOK, accountID)
+	responses.RespondJSON(w, http.StatusOK, tokenID)
 }
