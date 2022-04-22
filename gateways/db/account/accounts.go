@@ -14,13 +14,13 @@ import (
 var _ account.Repository = (*Database)(nil)
 
 type Database struct {
-	data map[uuid.UUID]accounts.Account
+	data map[uuid.UUID]*accounts.Account
 }
 
 // NewRepository, cria um novo repositório do banco
 func NewRepository() *Database {
 	return &Database{
-		data: make(map[uuid.UUID]accounts.Account),
+		data: make(map[uuid.UUID]*accounts.Account),
 	}
 }
 
@@ -34,7 +34,7 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 
 	account.ID = uuID.String()
 	account.CreatedAt = time.Now().UTC()
-	db.data[uuID] = account
+	db.data[uuID] = &account
 
 	return uuID, nil
 }
@@ -55,7 +55,13 @@ func (db *Database) ListAllAccounts(_ context.Context) ([]accounts.Account, erro
 	var accountsList []accounts.Account
 
 	for _, account := range db.data {
-		accountsList = append(accountsList, account)
+		accountsList = append(accountsList, *&accounts.Account{
+			ID:        account.ID,
+			Name:      account.Name,
+			CPF:       account.CPF,
+			Balance:   account.Balance,
+			CreatedAt: account.CreatedAt,
+		})
 	}
 
 	return accountsList, nil
@@ -76,15 +82,36 @@ func (db *Database) ListAccountsByCPF(ctx context.Context, accCPF string) (accou
 }
 
 // ListAccountsByID, verifica a existência de uma conta pelo ID
-func (db *Database) ListAccountByID(ctx context.Context, accID string) error {
+func (db *Database) ListAccountByID(_ context.Context, acc string) (accounts.Account, error) {
 
-	listAcc, _ := db.ListAllAccounts(ctx)
-
-	for _, account := range listAcc {
-		if account.ID == accID {
-			return errors.New("account not found")
-		}
+	accID, err := uuid.Parse(acc)
+	if err != nil {
+		return accounts.Account{}, err
 	}
 
-	return nil
+	if account, ok := db.data[accID]; ok {
+		acc := accounts.Account{
+			ID:      account.ID,
+			Name:    account.Name,
+			CPF:     account.CPF,
+			Balance: account.Balance,
+		}
+		return acc, nil
+	}
+
+	return accounts.Account{}, errors.New("account not found")
+}
+
+func (db *Database) UpdatedAccount(ctx context.Context, b accounts.Balance) error {
+	accID, err := uuid.Parse(b.ID)
+	if err != nil {
+		return err
+	}
+
+	if _, ok := db.data[accID]; ok {
+		db.data[accID].Balance = b.Balance
+		return nil
+	}
+
+	return errors.New("Internal Server Error")
 }
