@@ -9,6 +9,7 @@ import (
 
 type RepositoryTransfers interface {
 	SaveTransfer(context.Context, transfers.Transfer) (uuid.UUID, error)
+	ListAllTransfers(context.Context, string) ([]transfers.Transfer, error)
 }
 
 type UsecaseTransfers struct {
@@ -20,5 +21,4 @@ func NewUsecaseTransfers(repo RepositoryTransfers) *UsecaseTransfers {
 	return &UsecaseTransfers{
 		repo: repo,
 	}
-
 }
