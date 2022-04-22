@@ -8,6 +8,7 @@ import (
 var (
 	errInvalidLengthID = errors.New("Empty ID not allowed")
 	errInvalidAmount   = errors.New("Invalid amount, be must > 0")
+	errEqualAccounts   = errors.New("Equal source and destination accounts are not allowed.")
 )
 
 type Transfer struct {
@@ -18,13 +19,17 @@ type Transfer struct {
 	Created_At             time.Time `json:"created_at"`
 }
 
-func ValidateTransferData(accID string, amount uint) error {
-	if len(accID) == 0 {
+func ValidateTransferData(transfer *Transfer) error {
+	if len(transfer.Account_destination_ID) == 0 {
 		return errInvalidLengthID
 	}
 
-	if amount <= 0 {
+	if transfer.Amount <= 0 {
 		return errInvalidAmount
+	}
+
+	if transfer.Account_origin_ID == transfer.Account_destination_ID {
+		return errEqualAccounts
 	}
 
 	return nil
