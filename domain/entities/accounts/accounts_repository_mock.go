@@ -11,7 +11,8 @@ type AccountMock struct {
 	ListAllAcc           func(context.Context) ([]Account, error)
 	ListBalanceByIDAcc   func(uuid.UUID) (int, error)
 	ListAccountsByCPFAcc func(string) (Account, error)
-	ListAccountByIDacc   func(string) error
+	ListAccountByIDacc   func(string) (Account, error)
+	UpdatedAccountacc    func(Balance) error
 }
 
 func (m AccountMock) SaveAccount(ctx context.Context, acc Account) (uuid.UUID, error) {
@@ -30,6 +31,10 @@ func (m AccountMock) ListAccountsByCPF(ctx context.Context, accCPF string) (Acco
 	return m.ListAccountsByCPFAcc(accCPF)
 }
 
-func (m AccountMock) ListAccountByID(ctx context.Context, accID string) error {
+func (m AccountMock) ListAccountByID(ctx context.Context, accID string) (Account, error) {
 	return m.ListAccountByIDacc(accID)
+}
+
+func (m AccountMock) UpdatedAccount(ctx context.Context, b Balance) error {
+	return m.UpdatedAccountacc(b)
 }

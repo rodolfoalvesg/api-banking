@@ -17,6 +17,11 @@ type Account struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
+type Balance struct {
+	ID      string
+	Balance int
+}
+
 // CreateAccount, verifica as regras da conta
 func GeneratePasswdHash(ctx context.Context, account Account) ([]byte, error) {
 

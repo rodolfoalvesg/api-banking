@@ -11,5 +11,6 @@ type AccountRepository interface {
 	ListAllAccounts(context.Context) ([]Account, error)
 	ListBalanceByID(context.Context, uuid.UUID) (int, error)
 	ListAccountsByCPF(context.Context, string) (Account, error)
-	ListAccountByID(context.Context, string) error
+	ListAccountByID(context.Context, string) (Account, error)
+	UpdatedAccount(context.Context, Balance) error
 }
