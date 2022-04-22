@@ -11,6 +11,7 @@ import (
 
 type ControllersTransfers interface {
 	CreateTransfer(context.Context, transfers.Transfer) (uuid.UUID, error)
+	ShowTransfers(context.Context, string) ([]transfers.Transfer, error)
 }
 
 type ControllersAccount interface {
@@ -18,6 +19,8 @@ type ControllersAccount interface {
 	ShowAccounts(context.Context) ([]accounts.Account, error)
 	ShowBalance(context.Context, uuid.UUID) (int, error)
 	NewLogin(context.Context, account.Login) (string, error)
+	GetAccount(context.Context, string) (accounts.Account, error)
+	UpdateAccount(context.Context, transfers.Transfer) error
 }
 
 type Controller struct {
