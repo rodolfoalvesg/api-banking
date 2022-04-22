@@ -36,8 +36,19 @@ func (dt *DatabaseTransfer) SaveTransfer(ctx context.Context, transfer transfers
 	transfer.Created_At = time.Now().UTC()
 	dt.dataTransfers[uuID] = transfer
 
-	// db := Database{}
-	// listAccounts, _ := db.ListAllAccounts(ctx)
-
 	return uuID, nil
+}
+
+// SaveTransfer, salva a transferência entre contas
+func (dt *DatabaseTransfer) ListAllTransfers(_ context.Context, accID string) ([]transfers.Transfer, error) {
+
+	listTransfers := []transfers.Transfer{}
+
+	for _, transfer := range dt.dataTransfers {
+		if transfer.Account_origin_ID == accID {
+			listTransfers = append(listTransfers, transfer)
+		}
+	}
+
+	return listTransfers, nil
 }
