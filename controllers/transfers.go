@@ -20,7 +20,7 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 
 	defer r.Body.Close()
 
-	//ValidateTransferData, valida os dados de entrada
+	// ValidateTransferData, valida os dados de entrada
 	err := transfers.ValidateTransferData(&transfer)
 	if err != nil {
 		responses.RespondError(w, http.StatusPreconditionFailed, err)
@@ -34,7 +34,7 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	//GetAccount, verifica se a conta de destino existe
+	// GetAccount, verifica se a conta de destino existe
 	_, err = c.account.GetAccount(r.Context(), transfer.Account_destination_ID)
 	if err != nil {
 		responses.RespondError(w, http.StatusNotFound, err)
@@ -43,14 +43,14 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 
 	transfer.Account_origin_ID = userIDToken
 
-	//CreateTransfer, salva a transferencia
+	// CreateTransfer, salva a transferencia
 	transferID, err := c.transfer.CreateTransfer(r.Context(), transfer)
 	if err != nil {
 		responses.RespondError(w, http.StatusConflict, err)
 		return
 	}
 
-	//UpdateAccount, atualiza o saldo das contas
+	// UpdateAccount, atualiza o saldo das contas
 	err = c.account.UpdateAccount(r.Context(), transfer)
 	if err != nil {
 		responses.RespondError(w, http.StatusInternalServerError, err)
