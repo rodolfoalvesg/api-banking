@@ -3,16 +3,16 @@ package account
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 )
 
-func (u Usecase) ShowBalance(ctx context.Context, accID uuid.UUID) (int, error) {
+func (u Usecase) GetAccount(ctx context.Context, accID string) (accounts.Account, error) {
 
-	accBalance, err := u.repo.ListBalanceByID(ctx, accID)
+	account, err := u.repo.ListAccountByID(ctx, accID)
 	if err != nil {
-		return 0, err
+		return account, err
 	}
 
-	return accBalance, nil
+	return account, nil
 
 }
