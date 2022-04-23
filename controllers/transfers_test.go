@@ -225,5 +225,94 @@ func TestCreateTransferHandler(t *testing.T) {
 		})
 
 	}
+}
+
+func TestListTransferHandler(t *testing.T) {
+	listTransfersFake := []transfers.Transfer{}
+
+	type TestCaseB struct {
+		Name           string
+		transferMock   transfer.UseCaseTransferMock
+		tokenID        string
+		formatToken    string
+		wantStatusCode int
+	}
+
+	listAccountsFake := []accounts.Account{
+		{
+			ID:      uuid.New().String(),
+			CPF:     "12345678900",
+			Balance: 15000,
+		},
+		{
+			ID:      uuid.New().String(),
+			CPF:     "12345678911",
+			Balance: 2500,
+		},
+	}
+
+	testCase := []TestCaseB{
+		{
+			Name: "Transfer successfully listed",
+			transferMock: transfer.UseCaseTransferMock{
+				ListAllTransfers: func(string) ([]transfers.Transfer, error) {
+					return listTransfersFake, nil
+				},
+			},
+			tokenID:        listAccountsFake[0].ID,
+			formatToken:    "Bearer ",
+			wantStatusCode: 200,
+		},
+		{
+			Name: "Internal Server Error",
+			transferMock: transfer.UseCaseTransferMock{
+				ListAllTransfers: func(string) ([]transfers.Transfer, error) {
+					return nil, errors.New("Internal Server Error")
+				},
+			},
+			tokenID:        listAccountsFake[0].ID,
+			formatToken:    "Bearer ",
+			wantStatusCode: 500,
+		},
+		{
+			Name: "Invalid Token",
+			transferMock: transfer.UseCaseTransferMock{
+				ListAllTransfers: func(string) ([]transfers.Transfer, error) {
+					return nil, errors.New("Internal Server Error")
+				},
+			},
+			tokenID:        listAccountsFake[0].ID,
+			formatToken:    "",
+			wantStatusCode: 401,
+		},
+	}
+
+	for _, tc := range testCase {
+		tt := tc
+		t.Run(tt.Name, func(t *testing.T) {
+			t.Parallel()
+
+			handler := NewController(nil, &transfer.UseCaseTransferMock{
+				ListAllTransfers: tt.transferMock.ListAllTransfers,
+			})
+
+			token, _ := security.CreateToken(tt.tokenID)
+			bearer := tt.formatToken + token
+
+			path := fmt.Sprintf("/transfers")
+
+			w := httptest.NewRecorder()
+			r := httptest.NewRequest(http.MethodGet, path, nil)
+
+			r.Header.Add("Authorization", bearer)
+
+			http.HandlerFunc(handler.ListTransferHandler).ServeHTTP(w, r)
+
+			if w.Code != tt.wantStatusCode {
+				t.Errorf("%s: got %v, want %v", tt.Name, w.Code, tt.wantStatusCode)
+			}
+		})
+
+	}
 
 }
