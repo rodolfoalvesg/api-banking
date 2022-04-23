@@ -57,7 +57,7 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	responses.RespondJSON(w, http.StatusOK, transferID)
+	responses.RespondJSON(w, http.StatusCreated, transferID)
 
 }
 
