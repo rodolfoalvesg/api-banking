@@ -76,7 +76,7 @@ func TestNewLogin(t *testing.T) {
 		}
 	})
 
-	t.Run("Passwd Invalid", func(t *testing.T) {
+	t.Run("Invalid Passwd", func(t *testing.T) {
 		t.Parallel()
 
 		accountMock := accounts.AccountMock{
