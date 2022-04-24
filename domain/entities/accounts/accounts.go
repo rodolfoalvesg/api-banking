@@ -28,7 +28,7 @@ func GeneratePasswdHash(ctx context.Context, account Account) ([]byte, error) {
 	//Cria um hash da senha passada
 	passwdHash, err := security.SecurityHash(account.Secret)
 	if err != nil {
-		return nil, errors.New("Não foi possível criar o HASH")
+		return nil, errors.New("Error creating hash")
 	}
 
 	return passwdHash, nil
