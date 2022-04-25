@@ -167,7 +167,7 @@ func TestShowAccounts(t *testing.T) {
 			want: myListAccounts,
 		},
 		{
-			Name: "Error Accounts not Listed",
+			Name: "Error: Accounts not Listed",
 			accountMock: accounts.AccountMock{
 				ListAllAcc: func(context.Context) ([]accounts.Account, error) {
 					return []accounts.Account{}, errors.New("Erro")
