@@ -16,7 +16,7 @@ type DatabaseTransfer struct {
 	dataTransfers map[uuid.UUID]transfers.Transfer
 }
 
-// NewRepository, cria um novo repositório do banco
+// NewRepositoryTransfer, cria um novo repositório do banco
 func NewRepositoryTransfer() *DatabaseTransfer {
 	return &DatabaseTransfer{
 		dataTransfers: make(map[uuid.UUID]transfers.Transfer),
@@ -39,7 +39,7 @@ func (dt *DatabaseTransfer) SaveTransfer(ctx context.Context, transfer transfers
 	return uuID, nil
 }
 
-// SaveTransfer, salva a transferência entre contas
+// ListAllTransfers, Lista todas as transferências de um usuário
 func (dt *DatabaseTransfer) ListAllTransfers(_ context.Context, accID string) ([]transfers.Transfer, error) {
 
 	listTransfers := []transfers.Transfer{}
