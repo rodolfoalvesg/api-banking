@@ -20,7 +20,7 @@ type Transfer struct {
 }
 
 func ValidateTransferData(transfer *Transfer) error {
-	if len(transfer.Account_destination_ID) == 0 {
+	if len(transfer.Account_destination_ID) != 36 {
 		return errInvalidLengthID
 	}
 
