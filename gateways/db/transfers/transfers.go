@@ -2,12 +2,16 @@ package transfer_db
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/transfers"
 	transfer "github.com/rodolfoalvesg/api-banking/api/domain/usecases/transfers"
+)
+
+var (
+	ErrIDExists = errors.New("ID already exists")
 )
 
 var _ transfer.RepositoryTransfers = (*DatabaseTransfer)(nil)
@@ -29,7 +33,7 @@ func (dt *DatabaseTransfer) SaveTransfer(ctx context.Context, transfer transfers
 	var uuID = uuid.New()
 
 	if _, ok := dt.dataTransfers[uuID]; ok {
-		return uuid.UUID{}, fmt.Errorf("ID already exists!")
+		return uuid.UUID{}, ErrIDExists
 	}
 
 	transfer.ID = uuID.String()
