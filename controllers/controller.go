@@ -21,6 +21,7 @@ type ControllersAccount interface {
 	NewLogin(context.Context, account.Login) (string, error)
 	GetAccount(context.Context, string) (accounts.Account, error)
 	UpdateAccount(context.Context, transfers.Transfer) error
+	VerifyAccount(context.Context, string) error
 }
 
 type Controller struct {
