@@ -23,7 +23,9 @@ type Balance struct {
 }
 
 var (
-	ErrCreateHash = errors.New("Error creating hash")
+	ErrCreateHash       = errors.New("Error creating hash")
+	ErrInvalidPasswd    = errors.New("password must be at least 8 characters long")
+	ErrInvalidLengthCPF = errors.New("CPF must be exactly 11 characters long")
 )
 
 // CreateAccount, verifica as regras da conta
@@ -36,4 +38,18 @@ func GeneratePasswdHash(ctx context.Context, account Account) ([]byte, error) {
 	}
 
 	return passwdHash, nil
+}
+
+func ValidateCreateAccountData(account Account) error {
+
+	// Analisa se a senha atende os critérios
+	if len(account.Secret) < 8 {
+		return ErrInvalidPasswd
+	}
+
+	if len(account.CPF) != 11 {
+		return ErrInvalidLengthCPF
+	}
+
+	return nil
 }
