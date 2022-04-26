@@ -69,7 +69,7 @@ func (m *UseCaseMock) UpdateAccount(_ context.Context, transfer transfers.Transf
 	return m.UpdatedAccount(accounts.Balance{})
 }
 
-// UpdateAccount, mock caso de uso para atualizar saldo de contas
+// VerifyAccount, mock caso de uso para verificar a existência de conta
 func (m *UseCaseMock) VerifyAccount(_ context.Context, accCPF string) error {
 	return m.VerifyAccountByCPF(accCPF)
 }
