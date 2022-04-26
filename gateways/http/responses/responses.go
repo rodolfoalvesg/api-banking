@@ -22,5 +22,7 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 
 // RespondError, retorna um erro em formato JSON
 func RespondError(w http.ResponseWriter, statusCode int, err error) {
-	RespondJSON(w, statusCode, map[string]error{"error": err})
+	RespondJSON(w, statusCode, map[string]string{
+		"Error": err.Error(),
+	})
 }
