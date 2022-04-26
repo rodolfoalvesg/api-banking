@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -12,8 +13,7 @@ import (
 )
 
 var (
-	errInvalidPasswd = errors.New("password must be at least 8 characters long")
-	errEmptyID       = errors.New("ID cannot be empty")
+	errEmptyID = errors.New("ID cannot be empty")
 )
 
 // CreateAccountHandler, cria uma requisição para criação de conta
@@ -27,15 +27,21 @@ func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request
 
 	defer r.Body.Close()
 
-	// Analisa se a senha atende os critérios
-	if len(acc.Secret) < 8 {
-		responses.RespondError(w, http.StatusFailedDependency, errInvalidPasswd)
+	err := accounts.ValidateCreateAccountData(acc)
+	if err != nil {
+		responses.RespondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	err = c.account.VerifyAccount(context.Background(), acc.CPF)
+	if err != nil {
+		responses.RespondError(w, http.StatusConflict, err)
 		return
 	}
 
 	accCreated, err := c.account.CreateAccount(r.Context(), acc)
 	if err != nil {
-		responses.RespondJSON(w, http.StatusConflict, err)
+		responses.RespondError(w, http.StatusConflict, err)
 		return
 	}
 
@@ -52,7 +58,7 @@ func (c *Controller) ShowBalanceHandler(w http.ResponseWriter, r *http.Request) 
 	accID := uuid.MustParse(accountID)
 
 	if accID == emptyID {
-		responses.RespondJSON(w, http.StatusBadRequest, errEmptyID)
+		responses.RespondError(w, http.StatusBadRequest, errEmptyID)
 		return
 	}
 
