@@ -22,13 +22,17 @@ type Balance struct {
 	Balance int
 }
 
+var (
+	ErrCreateHash = errors.New("Error creating hash")
+)
+
 // CreateAccount, verifica as regras da conta
 func GeneratePasswdHash(ctx context.Context, account Account) ([]byte, error) {
 
 	//Cria um hash da senha passada
 	passwdHash, err := security.SecurityHash(account.Secret)
 	if err != nil {
-		return nil, errors.New("Error creating hash")
+		return nil, ErrCreateHash
 	}
 
 	return passwdHash, nil
