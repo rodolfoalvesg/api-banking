@@ -12,6 +12,7 @@ var (
 	errInsufficientFunds = errors.New("Insufficient funds")
 )
 
+//UpdateAccount, caso de uso para atualização de saldo após uma transferência
 func (u Usecase) UpdateAccount(ctx context.Context, t transfers.Transfer) error {
 	originAccount, err := u.repo.ListAccountByID(ctx, t.Account_origin_ID)
 	if err != nil {

@@ -15,6 +15,7 @@ type Router struct {
 	Authentication bool
 }
 
+//Setup, configuração de rotas
 func Setup(r *mux.Router, c *controllers.Controller) *mux.Router {
 
 	routerAccounts := RouterAccounts(*c)

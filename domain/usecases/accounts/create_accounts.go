@@ -8,6 +8,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 )
 
+//CreateAccount, caso de uso para criação de conta
 func (u Usecase) CreateAccount(ctx context.Context, account accounts.Account) (uuid.UUID, error) {
 
 	acc, err := accounts.GeneratePasswdHash(ctx, account)

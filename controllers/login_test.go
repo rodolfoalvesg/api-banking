@@ -16,6 +16,7 @@ import (
 	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
 )
 
+//TestLoginHandler, teste de requisição para login
 func TestLoginHandler(t *testing.T) {
 	myAccountFake := accounts.Account{
 		ID:        uuid.New().String(),

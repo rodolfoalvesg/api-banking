@@ -17,6 +17,7 @@ var (
 	ErrCreateToken   = errors.New("error creating token")
 )
 
+//NewLogin, caso de uso para login de usuário
 func (u Usecase) NewLogin(ctx context.Context, l Login) (string, error) {
 
 	account, err := u.repo.ListAccountsByCPF(ctx, l.CPF)

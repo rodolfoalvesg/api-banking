@@ -6,6 +6,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/controllers"
 )
 
+//RouterTransfers, rotas da entidade transferência
 func RouterTransfers(c controllers.Controller) []Router {
 	return []Router{
 		{

@@ -184,7 +184,7 @@ func TestShowBalanceHandler(t *testing.T) {
 	}
 }
 
-// TestHandlerShowAccounts, teste do handler para listagem de todas as contas
+// TestShowAccountsHandler, teste do handler para listagem de todas as contas
 func TestShowAccountsHandler(t *testing.T) {
 	t.Parallel()
 

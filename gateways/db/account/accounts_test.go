@@ -9,6 +9,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 )
 
+//TestSaveAccount, teste de método para salvar conta no db
 func TestSaveAccount(t *testing.T) {
 	t.Parallel()
 
@@ -29,6 +30,7 @@ func TestSaveAccount(t *testing.T) {
 
 }
 
+//TestListBalanceByID, teste de método para exibir saldo de uma conta do db
 func TestListBalanceByID(t *testing.T) {
 	t.Parallel()
 	repository := NewRepository()
@@ -59,6 +61,7 @@ func TestListBalanceByID(t *testing.T) {
 	})
 }
 
+//TestListAllAccounts, teste de método para exibir todas as contas db
 func TestListAllAccounts(t *testing.T) {
 	t.Parallel()
 	repository := NewRepository()
@@ -82,9 +85,9 @@ func TestListAllAccounts(t *testing.T) {
 			t.Errorf("got %v, want %v", got, want)
 		}
 	})
-
 }
 
+//TestListAccountsByCPF, teste de método para exibir uma conta do db pelo CPF
 func TestListAccountsByCPF(t *testing.T) {
 	t.Parallel()
 	repository := NewRepository()
@@ -116,9 +119,9 @@ func TestListAccountsByCPF(t *testing.T) {
 			t.Errorf("got %v, want %v", got, want)
 		}
 	})
-
 }
 
+//TestListAccountByID, teste de método para exibir uma conta do db pelo ID
 func TestListAccountByID(t *testing.T) {
 	t.Parallel()
 	myAccountFake := accounts.Account{
@@ -166,6 +169,7 @@ func TestListAccountByID(t *testing.T) {
 	})
 }
 
+//TestUpdatedAccount, teste de método para atualizar saldo de um usuário
 func TestUpdatedAccount(t *testing.T) {
 	t.Parallel()
 

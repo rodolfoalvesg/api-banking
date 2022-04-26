@@ -11,6 +11,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/transfers"
 )
 
+//TestSaveTransfer, teste de método para criação e registro de uma transferência no db
 func TestSaveTransfer(t *testing.T) {
 
 	type TestCase struct {
@@ -53,9 +54,9 @@ func TestSaveTransfer(t *testing.T) {
 			}
 		})
 	}
-
 }
 
+//TestListAllTransfers, teste de método exibição de todas as transferências de um usuário
 func TestListAllTransfers(t *testing.T) {
 	t.Parallel()
 	repository := NewRepositoryTransfer()
@@ -78,5 +79,4 @@ func TestListAllTransfers(t *testing.T) {
 			t.Errorf("got %v, want %v", got, want)
 		}
 	})
-
 }

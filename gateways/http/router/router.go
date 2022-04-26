@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+//CreateRouters, cria as rotas
 func CreateRouters(c *controllers.Controller) *mux.Router {
 	r := mux.NewRouter()
 	return routers.Setup(r, c)

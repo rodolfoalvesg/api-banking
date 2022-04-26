@@ -8,7 +8,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/gateways/http/responses"
 )
 
-// Login, cria o logon para a api
+// LoginHandler, cria o login para a api
 func (c *Controller) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	var acc account.Login

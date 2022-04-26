@@ -11,6 +11,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/transfers"
 )
 
+//TestCreateTransfer, teste de caso de uso para criar e registrar transferência
 func TestCreateTransfer(t *testing.T) {
 	t.Parallel()
 
@@ -72,6 +73,7 @@ func TestCreateTransfer(t *testing.T) {
 	}
 }
 
+//TestShowTransfers, teste de caso de uso para exibição de transferências de um usuário
 func TestShowTransfers(t *testing.T) {
 	t.Parallel()
 

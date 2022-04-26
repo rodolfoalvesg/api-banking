@@ -16,6 +16,7 @@ var (
 	SecretKey []byte
 )
 
+//LoadEnv, carregamento das variáveis de ambiente
 func LoadEnv() {
 	var err error
 

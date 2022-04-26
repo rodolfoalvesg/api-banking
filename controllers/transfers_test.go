@@ -17,6 +17,7 @@ import (
 	transfer "github.com/rodolfoalvesg/api-banking/api/domain/usecases/transfers"
 )
 
+// TestCreateTransferHandler, teste para criação de registro de transferência
 func TestCreateTransferHandler(t *testing.T) {
 	listAccountsFake := []accounts.Account{
 		{
@@ -227,6 +228,7 @@ func TestCreateTransferHandler(t *testing.T) {
 	}
 }
 
+// TestListTransferHandler, teste para listagem de transferência
 func TestListTransferHandler(t *testing.T) {
 	listTransfersFake := []transfers.Transfer{}
 

@@ -128,6 +128,7 @@ func TestShowBalance(t *testing.T) {
 	}
 }
 
+//TestShowAccounts, teste de caso de uso para listar contas
 func TestShowAccounts(t *testing.T) {
 	t.Parallel()
 

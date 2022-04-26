@@ -6,6 +6,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/controllers"
 )
 
+//RouterLogin, rota de login
 func RouterLogin(c controllers.Controller) Router {
 	return Router{
 		URI:            "/login",

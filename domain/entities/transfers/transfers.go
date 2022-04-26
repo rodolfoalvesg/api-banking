@@ -19,6 +19,7 @@ type Transfer struct {
 	Created_At             time.Time `json:"created_at"`
 }
 
+//ValidateTransferData, valida as informações na origem de uma transferência
 func ValidateTransferData(transfer *Transfer) error {
 	if len(transfer.Account_destination_ID) != 36 {
 		return errInvalidLengthID

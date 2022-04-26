@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+//TestValidateTransferData, teste de validação de informações da transferência
 func TestValidateTransferData(t *testing.T) {
 	t.Parallel()
 

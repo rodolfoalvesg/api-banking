@@ -11,6 +11,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 )
 
+//TestNewLogin, teste caso de uso para login
 func TestNewLogin(t *testing.T) {
 
 	myLoginFakeA := Login{
