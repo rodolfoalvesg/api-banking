@@ -12,7 +12,7 @@ import (
 func TestSaveAccount(t *testing.T) {
 	t.Parallel()
 
-	t.Run("Saved Account", func(t *testing.T) {
+	t.Run("Save Account", func(t *testing.T) {
 		myAccountFake := accounts.Account{
 			Name:    "Fulano de Tal",
 			CPF:     "12345678900",
