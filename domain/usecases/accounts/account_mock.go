@@ -16,15 +16,17 @@ type RepositoryMock interface {
 	NewLogin(context.Context, Login) (string, error)
 	GetAccount(context.Context, string) (accounts.Account, error)
 	UpdateAccount(context.Context, transfers.Transfer) error
+	VerifyAccount(context.Context, string) error
 }
 
 type UseCaseMock struct {
-	SaveAccount       func(accounts.Account) (uuid.UUID, error)
-	ListAllAccounts   func(context.Context) ([]accounts.Account, error)
-	ListBalanceByID   func(uuid.UUID) (int, error)
-	ListAccountsByCPF func(string) (accounts.Account, error)
-	ListAccountByID   func(string) (accounts.Account, error)
-	UpdatedAccount    func(accounts.Balance) error
+	SaveAccount        func(accounts.Account) (uuid.UUID, error)
+	ListAllAccounts    func(context.Context) ([]accounts.Account, error)
+	ListBalanceByID    func(uuid.UUID) (int, error)
+	ListAccountsByCPF  func(string) (accounts.Account, error)
+	ListAccountByID    func(string) (accounts.Account, error)
+	UpdatedAccount     func(accounts.Balance) error
+	VerifyAccountByCPF func(string) error
 }
 
 // CreateAccount, mock caso de uso para criação de conta
@@ -65,4 +67,9 @@ func (m *UseCaseMock) GetAccount(_ context.Context, accID string) (accounts.Acco
 // UpdateAccount, mock caso de uso para atualizar saldo de contas
 func (m *UseCaseMock) UpdateAccount(_ context.Context, transfer transfers.Transfer) error {
 	return m.UpdatedAccount(accounts.Balance{})
+}
+
+// UpdateAccount, mock caso de uso para atualizar saldo de contas
+func (m *UseCaseMock) VerifyAccount(_ context.Context, accCPF string) error {
+	return m.VerifyAccountByCPF(accCPF)
 }
