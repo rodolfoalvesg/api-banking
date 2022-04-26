@@ -20,17 +20,19 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 
 	defer r.Body.Close()
 
-	// ValidateTransferData, valida os dados de entrada
-	err := transfers.ValidateTransferData(&transfer)
-	if err != nil {
-		responses.RespondError(w, http.StatusPreconditionFailed, err)
-		return
-	}
-
 	// ExtractUserID, extrai o id do usuário do token
 	userIDToken, err := security.ExtractUserID(r)
 	if err != nil {
 		responses.RespondError(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	transfer.Account_origin_ID = userIDToken
+
+	// ValidateTransferData, valida os dados de entrada
+	err = transfers.ValidateTransferData(&transfer)
+	if err != nil {
+		responses.RespondError(w, http.StatusPreconditionFailed, err)
 		return
 	}
 
@@ -40,8 +42,6 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 		responses.RespondError(w, http.StatusNotFound, err)
 		return
 	}
-
-	transfer.Account_origin_ID = userIDToken
 
 	// CreateTransfer, salva a transferencia
 	transferID, err := c.transfer.CreateTransfer(r.Context(), transfer)
