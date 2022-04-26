@@ -60,13 +60,7 @@ func (db *Database) ListAllAccounts(_ context.Context) ([]accounts.Account, erro
 	var accountsList []accounts.Account
 
 	for _, account := range db.data {
-		accountsList = append(accountsList, *&accounts.Account{
-			ID:        account.ID,
-			Name:      account.Name,
-			CPF:       account.CPF,
-			Balance:   account.Balance,
-			CreatedAt: account.CreatedAt,
-		})
+		accountsList = append(accountsList, *account)
 	}
 
 	return accountsList, nil
