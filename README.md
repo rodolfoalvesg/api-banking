@@ -1,12 +1,50 @@
-# api-banking
+# Desafio Técnico - Go(lang) - api-banking 
 Desafio stone em Go para criação de api baking.
 
-# Desafio Técnico - Go(lang)
+<a name="ancora"></a>
+# Desafio e Instrunções
+- [Desafio Concluído](#ancora1)
+- [Instruções e Regras](#ancora2)
+
+
+<a id="ancora1"></a>
+## Documentação do Desafio
+**API de transferencia entre contas Internas de um banco digital.**
+#### Rotas e exemplos
+##### Criação de Contas: 
+- `POST \accounts`
+- body:
+```json
+{
+    "name": "My Name",
+    "cpf": "1234567800",
+    "secret": "12345678",
+    "balance": 2000
+}
+```
+- Especificação: campos `name`, `cpf` e `secret` obrigatórios. O campo `balance` poderá ser omitido, porém receberá como valor inicial, 0 (zero).
+- Casos de respostas
+  * Sucesso:
+     + status code: `201` 
+     + content-type: `application/json`
+     + body:
+    ```json
+      "cc5c3af1-e1ba-47ee-94b5-bd7fda44999b"
+    ```
+  * Falhas:
+     1. Id
+  
+
+[Topo](#ancora)
+
+* * * *
+* * * *
+<a id="ancora2"></a>
+
+
+## Instruções e Regras do Desafio
 
 **O desafio é criar uma API de transferencia entre contas Internas de um banco digital.**
-
-=====================
-#### API
 
 #### Regras gerais
 
@@ -15,7 +53,7 @@ Desafio stone em Go para criação de api baking.
 #### Rotas esperadas
 
 ##### `/accounts`
-
+##
 A entidade `Account` possui os seguintes atributos:
 
 * `id`
@@ -36,8 +74,9 @@ Espera-se as seguintes ações:
 - `balance` pode iniciar com 0 ou algum valor para simplificar
 - `secret` deve ser armazenado como hash
 
-* * *
+
 ##### `/login`
+##
 
 A entidade `Login` possui os seguintes atributos:
 
@@ -52,9 +91,9 @@ Espera-se as seguintes ações:
 
 - Deve retornar token para ser usado nas rotas autenticadas
 
-* * * 
 
 ##### `/transfers`
+##
 
 A entidade `Transfer` possui os seguintes atributos:
 
@@ -88,81 +127,5 @@ Espera-se as seguintes ações:
 - Pode-se utilizar qualquer package ou framework, mas lembre-se: stdlib > packages > frameworks (usar standard library do Go é melhor que usar packages, que é melhor que usar frameworks...)
 - Utilização de Docker é obrigatório
 
-_Indicação de material de estudo no final_
-
-## Critérios de Avaliação
-O desafio será avaliado através de quatro critérios.
-
-### Entrega
-- O resultado final está completo para ser executado?
-- O resultado final atende ao que se propõe fazer?
-- O resultado final atende totalmente aos requisitos propostos?
-- O código possui algum controle de dependências?
-
-### Boas Práticas
-- O código está de acordo com o guia de estilo do Go?
-- O código está bem estruturado?
-- O código está fluente na linguagem?
-- O código faz o uso correto de Design Patterns?
-
-
-### Documentação
-- O código foi entregue com um arquivo de README claro de como se guiar?
-- O código possui comentários pertinentes?
-- O código está em algum controle de versão?
-- Os commits são pequenos e consistentes?
-- As mensagens de commit são claras?
-
-
-### Código Limpo
-- O código possibilita expansão para novas funcionalidades?
-- O código é Don't Repeat Yourself?
-- O código é fácil de compreender?
-- O código possui testes?
-
-
-### Material de Estudo
-
-#### Go
-- [Lets'Go - WWG Curitiba + Stone para Iniciantes](https://womenwhogocwb.gitbook.io/letsgo/)
-- [Effective Go](https://go.dev/doc/effective_go) 
-- [Aprenda Go com Testes](https://larien.gitbook.io/aprenda-go-com-testes/)
-- [Curso Aprenda Go (@ellenkorbes) ](https://www.youtube.com/channel/UCxD5EE0H7qOhRr0tIVsOZPQ)
-- [Learn Go](https://learn.go.dev)
-- [Gophercise](https://gophercises.com/)
-- [Build Web Application with Golang](https://astaxie.gitbooks.io/build-web-application-with-golang)
-- [Error Handling](https://rauljordan.com/2020/07/06/why-go-error-handling-is-awesome.html)
-- [DDD Lite in Go](https://threedots.tech/post/ddd-lite-in-go-introduction/)
-- [Repository Pattern in Go](https://threedots.tech/post/repository-pattern-in-go/)
-
-#### Rest
-- [Desing RESTful API's](https://hackernoon.com/restful-api-design-step-by-step-guide-2f2c9f9fcdbf)
-- [HTTP Status Code](https://kinsta.com/pt/blog/lista-codigos-status-http/)
-
-#### Boas praticas
-- [Boas Práticas na Stone](https://github.com/stone-payments/stoneco-best-practices/blob/master/README_pt.md)
-- [Uber-go Guide](https://github.com/uber-go/guide/blob/master/style.md)
-
-#### Outros
-- [SOLID](https://www.youtube.com/watch?v=rtmFCcjEgEw)
-- [SOLID in GO](https://www.youtube.com/watch?v=AKdvlr-RzEA)
-- [Grupo de Estudos de Go (pt-br)](https://www.youtube.com/channel/UCxRoRvJi7NbC2boKAV70t_g)
-- [Web Development with Go (samples) -
-Jon Calhoun](https://www.youtube.com/playlist?list=PLVEltXlEeWglOJ42pCxf22YVyxkzan3Xg)
-- [Go Bootcamp from Gopherguides.tv](https://www.youtube.com/watch?v=22R1PqXvtws)
-- [Just for Func](https://www.youtube.com/playlist?list=PL64wiCrrxh4Jisi7OcCJIUpguV_f5jGnZ)
-- [Go WEB Examples](https://gowebexamples.com/)
-- [Dave Cheney Blog](https://dave.cheney.net/practical-go)
-- [Ardan Labs Blog](https://www.ardanlabs.com/blog)
-
-#### Comunidade Go
-
-- [Slack Gopher](https://invite.slack.golangbridge.org/)
-- [Telegram](https://t.me/go_br)
-
-### Sugestões
-
-- [Gorilla Mux](https://github.com/gorilla/mux)
-- [Negroni](https://github.com/urfave/negroni)
-- [Chi](https://github.com/go-chi/chi)
-- [sirupsen/log](https://github.com/sirupsen/logrus)
+[Topo](#ancora)
+* * *
