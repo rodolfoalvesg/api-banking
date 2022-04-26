@@ -3,12 +3,17 @@ package account_db
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 	account "github.com/rodolfoalvesg/api-banking/api/domain/usecases/accounts"
+)
+
+var (
+	ErrIDExists = errors.New("ID already exists!")
+	ErrNotFound = errors.New("Account not found")
+	ErrInternal = errors.New("Internal Server Error")
 )
 
 var _ account.Repository = (*Database)(nil)
@@ -29,7 +34,7 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 	var uuID = uuid.New()
 
 	if _, ok := db.data[uuID]; ok {
-		return uuid.UUID{}, fmt.Errorf("ID already exists!")
+		return uuid.UUID{}, ErrIDExists
 	}
 
 	account.ID = uuID.String()
@@ -46,7 +51,7 @@ func (db *Database) ListBalanceByID(_ context.Context, accID uuid.UUID) (int, er
 		return acc.Balance, nil
 	}
 
-	return 0, errors.New("Account not found")
+	return 0, ErrNotFound
 }
 
 // ListAllAccounts, lista todas as contas
@@ -78,7 +83,7 @@ func (db *Database) ListAccountsByCPF(ctx context.Context, accCPF string) (accou
 		}
 	}
 
-	return accounts.Account{}, errors.New("account not found")
+	return accounts.Account{}, ErrNotFound
 }
 
 // ListAccountsByID, verifica a existência de uma conta pelo ID
@@ -99,9 +104,10 @@ func (db *Database) ListAccountByID(_ context.Context, acc string) (accounts.Acc
 		return acc, nil
 	}
 
-	return accounts.Account{}, errors.New("account not found")
+	return accounts.Account{}, ErrNotFound
 }
 
+// UpdatedAccount, atualiza o saldo da conta
 func (db *Database) UpdatedAccount(ctx context.Context, b accounts.Balance) error {
 	accID, err := uuid.Parse(b.ID)
 	if err != nil {
@@ -113,5 +119,5 @@ func (db *Database) UpdatedAccount(ctx context.Context, b accounts.Balance) erro
 		return nil
 	}
 
-	return errors.New("Internal Server Error")
+	return ErrInternal
 }
