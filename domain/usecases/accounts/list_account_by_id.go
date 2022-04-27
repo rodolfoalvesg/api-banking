@@ -11,7 +11,7 @@ func (u Usecase) GetAccount(ctx context.Context, accID string) (accounts.Account
 
 	account, err := u.repo.ListAccountByID(ctx, accID)
 	if err != nil {
-		return account, err
+		return accounts.Account{}, err
 	}
 
 	return account, nil

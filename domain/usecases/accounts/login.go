@@ -13,8 +13,8 @@ type Login struct {
 }
 
 var (
-	ErrInvalidPasswd = errors.New("error validating password")
-	ErrCreateToken   = errors.New("error creating token")
+	ErrInvalidPasswd = errors.New("validating password")
+	ErrCreateToken   = errors.New("creating token")
 )
 
 //NewLogin, caso de uso para login de usuário

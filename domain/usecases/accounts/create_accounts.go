@@ -12,14 +12,14 @@ func (u Usecase) CreateAccount(ctx context.Context, account accounts.Account) (u
 
 	acc, err := accounts.GeneratePasswdHash(ctx, account)
 	if err != nil {
-		return uuid.UUID{}, err
+		return uuid.Nil, err
 	}
 
 	account.Secret = string(acc)
 
 	accID, err := u.repo.SaveAccount(ctx, account)
 	if err != nil {
-		return uuid.UUID{}, err
+		return uuid.Nil, err
 	}
 
 	return accID, nil

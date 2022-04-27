@@ -9,21 +9,21 @@ import (
 )
 
 var (
-	errInsufficientFunds = errors.New("Insufficient funds")
+	ErrInsufficientFunds = errors.New("insufficient funds")
 )
 
 //UpdateAccount, caso de uso para atualização de saldo após uma transferência
 func (u Usecase) UpdateAccount(ctx context.Context, t transfers.Transfer) error {
-	originAccount, err := u.repo.ListAccountByID(ctx, t.Account_origin_ID)
+	originAccount, err := u.repo.ListAccountByID(ctx, t.AccountOriginID)
 	if err != nil {
 		return err
 	}
 
 	if originAccount.Balance == 0 || originAccount.Balance < int(t.Amount) {
-		return errInsufficientFunds
+		return ErrInsufficientFunds
 	}
 
-	destinationAccount, err := u.repo.ListAccountByID(ctx, t.Account_destination_ID)
+	destinationAccount, err := u.repo.ListAccountByID(ctx, t.AccountDestinationID)
 	if err != nil {
 		return err
 	}

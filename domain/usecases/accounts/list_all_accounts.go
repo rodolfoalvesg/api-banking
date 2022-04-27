@@ -12,7 +12,7 @@ func (u Usecase) ShowAccounts(ctx context.Context) ([]accounts.Account, error) {
 
 	accList, err := u.repo.ListAllAccounts(ctx)
 	if err != nil {
-		return []accounts.Account{}, err
+		return nil, err
 	}
 
 	for _, account := range accList {
