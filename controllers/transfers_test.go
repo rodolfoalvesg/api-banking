@@ -43,8 +43,8 @@ func TestCreateTransferHandler(t *testing.T) {
 	}
 
 	myTransferFakeA := transfers.Transfer{
-		Account_destination_ID: listAccountsFake[1].ID,
-		Amount:                 2500,
+		AccountDestinationID: listAccountsFake[1].ID,
+		Amount:               2500,
 	}
 
 	myTransferFakeB := transfers.Transfer{}
