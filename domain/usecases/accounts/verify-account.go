@@ -7,7 +7,7 @@ import (
 
 var ErrConflictCPF = errors.New("CPF already exists")
 
-//ShowBalance, caso de uso para exibir saldo de uma conta através do ID
+//VerifyAccount, caso de uso para verificar a existÊncia de uma conta
 func (u Usecase) VerifyAccount(ctx context.Context, accCPF string) error {
 
 	account, _ := u.repo.ListAccountsByCPF(ctx, accCPF)
