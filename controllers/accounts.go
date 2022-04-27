@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	errEmptyID = errors.New("ID cannot be empty")
+	ErrEmptyID = errors.New("ID cannot be empty")
 )
 
 // CreateAccountHandler, cria uma requisição para criação de conta
@@ -58,7 +58,7 @@ func (c *Controller) ShowBalanceHandler(w http.ResponseWriter, r *http.Request) 
 	accID := uuid.MustParse(accountID)
 
 	if accID == emptyID {
-		responses.RespondError(w, http.StatusBadRequest, errEmptyID)
+		responses.RespondError(w, http.StatusBadRequest, ErrEmptyID)
 		return
 	}
 
