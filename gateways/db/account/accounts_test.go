@@ -23,7 +23,7 @@ func TestSaveAccount(t *testing.T) {
 
 		repository := NewRepository()
 		got, _ := repository.SaveAccount(context.Background(), myAccountFake)
-		if got == (uuid.UUID{}) {
+		if got == (uuid.Nil) {
 			t.Errorf("got %v, want !=  %v", got, uuid.UUID{})
 		}
 	})

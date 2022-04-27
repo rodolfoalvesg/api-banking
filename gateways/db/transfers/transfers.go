@@ -49,7 +49,7 @@ func (dt *DatabaseTransfer) ListAllTransfers(_ context.Context, accID string) ([
 	listTransfers := []transfers.Transfer{}
 
 	for _, transfer := range dt.dataTransfers {
-		if transfer.Account_origin_ID == accID {
+		if transfer.AccountOriginID == accID {
 			listTransfers = append(listTransfers, transfer)
 		}
 	}

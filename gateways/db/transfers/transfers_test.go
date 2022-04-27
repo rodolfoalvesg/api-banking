@@ -25,20 +25,20 @@ func TestSaveTransfer(t *testing.T) {
 		{
 			name: "Save the transfer successfully",
 			myTransferFake: transfers.Transfer{
-				ID:                     uuid.New().String(),
-				Account_origin_ID:      uuid.New().String(),
-				Account_destination_ID: uuid.New().String(),
-				Amount:                 25400,
-				Created_At:             time.Now().UTC(),
+				ID:                   uuid.New().String(),
+				AccountOriginID:      uuid.New().String(),
+				AccountDestinationID: uuid.New().String(),
+				Amount:               25400,
+				Created_At:           time.Now().UTC(),
 			},
 		},
 		{
 			name: "Fail if empty transfer id",
 			myTransferFake: transfers.Transfer{
-				Account_origin_ID:      uuid.New().String(),
-				Account_destination_ID: uuid.New().String(),
-				Amount:                 25400,
-				Created_At:             time.Now().UTC(),
+				AccountOriginID:      uuid.New().String(),
+				AccountDestinationID: uuid.New().String(),
+				Amount:               25400,
+				Created_At:           time.Now().UTC(),
 			},
 			err: nil,
 		},
@@ -63,9 +63,9 @@ func TestListAllTransfers(t *testing.T) {
 
 	t.Run("Accounts Listed", func(t *testing.T) {
 		myTransferFake := transfers.Transfer{
-			Account_origin_ID:      uuid.New().String(),
-			Account_destination_ID: uuid.New().String(),
-			Amount:                 25400,
+			AccountOriginID:      uuid.New().String(),
+			AccountDestinationID: uuid.New().String(),
+			Amount:               25400,
 		}
 
 		_, err := repository.SaveTransfer(context.Background(), myTransferFake)
@@ -73,7 +73,7 @@ func TestListAllTransfers(t *testing.T) {
 			t.Errorf("Save Transfer error")
 		}
 
-		got, _ := repository.ListAllTransfers(context.Background(), myTransferFake.Account_origin_ID)
+		got, _ := repository.ListAllTransfers(context.Background(), myTransferFake.AccountOriginID)
 		want := 1
 		if !reflect.DeepEqual(len(got), want) {
 			t.Errorf("got %v, want %v", got, want)

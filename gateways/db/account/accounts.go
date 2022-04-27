@@ -12,8 +12,8 @@ import (
 
 var (
 	ErrIDExists = errors.New("ID already exists!")
-	ErrNotFound = errors.New("Account not found")
-	ErrInternal = errors.New("Internal Server Error")
+	ErrNotFound = errors.New("account not found")
+	ErrInternal = errors.New("internal Server Error")
 )
 
 var _ account.Repository = (*Database)(nil)
@@ -34,7 +34,7 @@ func (db *Database) SaveAccount(_ context.Context, account accounts.Account) (uu
 	var uuID = uuid.New()
 
 	if _, ok := db.data[uuID]; ok {
-		return uuid.UUID{}, ErrIDExists
+		return uuid.Nil, ErrIDExists
 	}
 
 	account.ID = uuID.String()
