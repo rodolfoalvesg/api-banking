@@ -8,9 +8,9 @@ import (
 
 //ShowTransfers, caso de uso para exibir todas as transferências realizadas por um usuário
 func (u UsecaseTransfers) ShowTransfers(ctx context.Context, accID string) ([]transfers.Transfer, error) {
-	TransferList, err := u.repo.ListAllTransfers(ctx, accID)
+	transferList, err := u.repo.ListAllTransfers(ctx, accID)
 	if err != nil {
-		return []transfers.Transfer{}, err
+		return nil, err
 	}
-	return TransferList, nil
+	return transferList, nil
 }

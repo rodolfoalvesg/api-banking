@@ -16,10 +16,10 @@ func TestCreateTransfer(t *testing.T) {
 	t.Parallel()
 
 	tFake := transfers.Transfer{
-		Account_origin_ID:      uuid.New().String(),
-		Account_destination_ID: uuid.New().String(),
-		Amount:                 2550,
-		Created_At:             time.Now().UTC(),
+		AccountOriginID:      uuid.New().String(),
+		AccountDestinationID: uuid.New().String(),
+		Amount:               2550,
+		Created_At:           time.Now().UTC(),
 	}
 
 	type TestCase struct {
