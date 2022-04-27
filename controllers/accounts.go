@@ -35,7 +35,7 @@ func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request
 
 	err = c.account.VerifyAccount(context.Background(), acc.CPF)
 	if err != nil {
-		responses.RespondError(w, http.StatusConflict, err)
+		responses.RespondError(w, http.StatusBadRequest, err)
 		return
 	}
 
