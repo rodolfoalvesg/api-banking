@@ -27,7 +27,7 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	transfer.Account_origin_ID = userIDToken
+	transfer.AccountOriginID = userIDToken
 
 	// ValidateTransferData, valida os dados de entrada
 	err = transfers.ValidateTransferData(&transfer)
@@ -37,7 +37,7 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	// GetAccount, verifica se a conta de destino existe
-	_, err = c.account.GetAccount(r.Context(), transfer.Account_destination_ID)
+	_, err = c.account.GetAccount(r.Context(), transfer.AccountDestinationID)
 	if err != nil {
 		responses.RespondError(w, http.StatusNotFound, err)
 		return
