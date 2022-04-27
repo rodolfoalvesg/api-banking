@@ -37,6 +37,11 @@ func TestCreateAccountHandler(t *testing.T) {
 
 	myAccountB := accounts.Account{}
 
+	myAccountC := accounts.Account{
+		CPF:    "1234567890",
+		Secret: "12345678",
+	}
+
 	var accID = uuid.New()
 	tests := []TestCaseA{
 		{
@@ -45,11 +50,15 @@ func TestCreateAccountHandler(t *testing.T) {
 				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
 					return accID, nil
 				},
+				VerifyAccountByCPF: func(string) error {
+					return nil
+				},
 			},
 			bodyAcc:        myAccountA,
 			wantStatusCode: http.StatusCreated,
 			want:           accID,
-		}, {
+		},
+		{
 			Name: "Account not created",
 			accountMock: account.UseCaseMock{
 				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
@@ -59,7 +68,8 @@ func TestCreateAccountHandler(t *testing.T) {
 			bodyAcc:        "invalid",
 			wantStatusCode: http.StatusBadRequest,
 			want:           uuid.UUID{},
-		}, {
+		},
+		{
 			Name: "Invalid password length",
 			accountMock: account.UseCaseMock{
 				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
@@ -67,18 +77,47 @@ func TestCreateAccountHandler(t *testing.T) {
 				},
 			},
 			bodyAcc:        myAccountB,
-			wantStatusCode: http.StatusFailedDependency,
+			wantStatusCode: http.StatusBadRequest,
 			want:           uuid.UUID{},
-		}, {
+		},
+		{
 			Name: "Conflict ID",
 			accountMock: account.UseCaseMock{
 				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
 					return uuid.UUID{}, errors.New("Conflict")
 				},
+				VerifyAccountByCPF: func(string) error {
+					return nil
+				},
 			},
 			bodyAcc:        myAccountA,
 			wantStatusCode: http.StatusConflict,
 			want:           uuid.UUID{},
+		},
+		{
+			Name: "Invalid CPF",
+			accountMock: account.UseCaseMock{
+				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
+					return uuid.UUID{}, nil
+				},
+			},
+			bodyAcc:        myAccountC,
+			wantStatusCode: http.StatusBadRequest,
+			want:           accID,
+		},
+		{
+			Name: "Account already exist",
+			accountMock: account.UseCaseMock{
+				SaveAccount: func(accounts.Account) (uuid.UUID, error) {
+					return accID, nil
+				},
+				VerifyAccountByCPF: func(string) error {
+					return errors.New("account already exist")
+				},
+			},
+			bodyAcc:        myAccountA,
+			wantStatusCode: http.StatusBadRequest,
+			want:           accID,
 		},
 	}
 
@@ -88,7 +127,8 @@ func TestCreateAccountHandler(t *testing.T) {
 			t.Parallel()
 
 			handler := NewController(&account.UseCaseMock{
-				SaveAccount: tt.accountMock.SaveAccount,
+				SaveAccount:        tt.accountMock.SaveAccount,
+				VerifyAccountByCPF: tt.accountMock.VerifyAccountByCPF,
 			}, nil)
 
 			path := fmt.Sprintf("/accounts")
