@@ -23,7 +23,7 @@ type Balance struct {
 }
 
 var (
-	ErrCreateHash       = errors.New("Error creating hash")
+	ErrCreateHash       = errors.New("creating hash")
 	ErrInvalidPasswd    = errors.New("password must be at least 8 characters long")
 	ErrInvalidLengthCPF = errors.New("CPF must be exactly 11 characters long")
 )
