@@ -3,7 +3,6 @@ package account
 import (
 	"context"
 	"errors"
-	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -139,6 +138,7 @@ func TestShowAccounts(t *testing.T) {
 		Name        string
 		accountMock accounts.AccountMock
 		want        []accounts.Account
+		err         error
 	}
 
 	myListAccounts := []accounts.Account{
@@ -174,10 +174,10 @@ func TestShowAccounts(t *testing.T) {
 			Name: "Error: Accounts not Listed",
 			accountMock: accounts.AccountMock{
 				ListAllAcc: func(context.Context) ([]accounts.Account, error) {
-					return []accounts.Account{}, errors.New("Erro")
+					return nil, errors.New("Erro")
 				},
 			},
-			want: []accounts.Account{},
+			want: nil,
 		},
 	}
 
@@ -251,7 +251,7 @@ func TestVerifyAccount(t *testing.T) {
 			})
 
 			err := usecase.VerifyAccount(context.Background(), tt.accCPF)
-			fmt.Println(err, tt.err)
+
 			if err != tt.err {
 				t.Errorf("%s, want %v, got %v", tt.name, tt.err, err)
 			}
