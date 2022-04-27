@@ -14,8 +14,8 @@ func TestValidateTransferData(t *testing.T) {
 	t.Run("No error", func(t *testing.T) {
 
 		TestCaseA := Transfer{
-			Account_destination_ID: uuid.New().String(),
-			Amount:                 2500,
+			AccountDestinationID: uuid.New().String(),
+			Amount:               2500,
 		}
 
 		err := ValidateTransferData(&TestCaseA)
@@ -27,29 +27,29 @@ func TestValidateTransferData(t *testing.T) {
 
 	t.Run("Invalid Amount", func(t *testing.T) {
 		TestCaseB := Transfer{
-			Account_destination_ID: uuid.New().String(),
-			Amount:                 0,
+			AccountDestinationID: uuid.New().String(),
+			Amount:               0,
 		}
 
 		err := ValidateTransferData(&TestCaseB)
 
-		if !errors.Is(err, errInvalidAmount) {
-			t.Errorf("want %v, got %v", errInvalidAmount, err)
+		if !errors.Is(err, ErrInvalidAmount) {
+			t.Errorf("want %v, got %v", ErrInvalidAmount, err)
 		}
 	})
 
 	t.Run("Conflict ID", func(t *testing.T) {
 		accID := uuid.New().String()
 		TestCaseC := Transfer{
-			Account_origin_ID:      accID,
-			Account_destination_ID: accID,
-			Amount:                 2500,
+			AccountOriginID:      accID,
+			AccountDestinationID: accID,
+			Amount:               2500,
 		}
 
 		err := ValidateTransferData(&TestCaseC)
 
-		if !errors.Is(err, errEqualAccounts) {
-			t.Errorf("want %v, got %v", errEqualAccounts, err)
+		if !errors.Is(err, ErrEqualAccounts) {
+			t.Errorf("want %v, got %v", ErrEqualAccounts, err)
 		}
 	})
 }
