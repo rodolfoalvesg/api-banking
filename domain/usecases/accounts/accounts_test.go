@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"errors"
+	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -11,6 +12,7 @@ import (
 	"github.com/rodolfoalvesg/api-banking/api/domain/entities/accounts"
 )
 
+//TestCreateAccount. teste de caso de uso para registro e criação de uma conta
 func TestCreateAccount(t *testing.T) {
 	t.Parallel()
 
@@ -69,6 +71,7 @@ func TestCreateAccount(t *testing.T) {
 	}
 }
 
+//TestShowBalance, teste de caso de uso para exibir saldo de uma conta
 func TestShowBalance(t *testing.T) {
 	t.Parallel()
 
@@ -194,5 +197,68 @@ func TestShowAccounts(t *testing.T) {
 
 		})
 	}
+}
 
+//TestVerifyAccount, teste de caso para verificar a existência de uma conta
+func TestVerifyAccount(t *testing.T) {
+	t.Parallel()
+
+	type TestCase struct {
+		name        string
+		accCPF      string
+		accountMock accounts.AccountMock
+		want        accounts.Account
+		err         error
+	}
+
+	myAccountFake := accounts.Account{
+
+		ID:        uuid.New().String(),
+		Name:      "Rodolfo",
+		CPF:       "12345678900",
+		Secret:    "12345678",
+		Balance:   25550,
+		CreatedAt: time.Now().UTC(),
+	}
+
+	testCase := []TestCase{
+		{
+			name:   "Pass if the account doesn't exist",
+			accCPF: "12345678911",
+			accountMock: accounts.AccountMock{
+				ListAccountsByCPFAcc: func(string) (accounts.Account, error) {
+					return myAccountFake, nil
+				},
+			},
+			err: nil,
+		},
+		{
+			name:   "Does not pass if the account exists",
+			accCPF: "12345678900",
+			accountMock: accounts.AccountMock{
+				ListAccountsByCPFAcc: func(string) (accounts.Account, error) {
+					return myAccountFake, ErrConflictCPF
+				},
+			},
+			err: ErrConflictCPF,
+		},
+	}
+	for _, tc := range testCase {
+		tt := tc
+		t.Run(tt.name, func(t *testing.T) {
+			usecase := NewUsecase(accounts.AccountMock{
+				ListAccountsByCPFAcc: tt.accountMock.ListAccountsByCPFAcc,
+			})
+
+			err := usecase.VerifyAccount(context.Background(), tt.accCPF)
+			fmt.Println(err, tt.err)
+			if err != tt.err {
+				t.Errorf("%s, want %v, got %v", tt.name, tt.err, err)
+			}
+		})
+	}
+}
+
+//TestUpdateAccount, teste de caso para atualizar saldo de uma conta
+func TestUpdateAccount(t *testing.T) {
 }
