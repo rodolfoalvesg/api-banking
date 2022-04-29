@@ -37,7 +37,7 @@ func (dt *DatabaseTransfer) SaveTransfer(ctx context.Context, transfer transfers
 	}
 
 	transfer.ID = uuID.String()
-	transfer.Created_At = time.Now().UTC()
+	transfer.CreatedAt = time.Now().UTC()
 	dt.dataTransfers[uuID] = transfer
 
 	return uuID, nil
