@@ -116,7 +116,7 @@ func TestCreateAccountHandler(t *testing.T) {
 				},
 			},
 			bodyAcc:        myAccountA,
-			wantStatusCode: http.StatusBadRequest,
+			wantStatusCode: http.StatusConflict,
 			want:           accID,
 		},
 	}
@@ -154,13 +154,12 @@ func TestShowBalanceHandler(t *testing.T) {
 	type TestCaseB struct {
 		Name           string
 		accountMock    account.UseCaseMock
-		accountID      uuid.UUID
+		accountID      string
 		wantStatusCode int
-		want           int
 	}
 
 	balance := 15000
-	accID := uuid.New()
+	accID := uuid.New().String()
 
 	tests := []TestCaseB{
 		{
@@ -172,27 +171,36 @@ func TestShowBalanceHandler(t *testing.T) {
 			},
 			accountID:      accID,
 			wantStatusCode: http.StatusOK,
-			want:           balance,
-		}, {
+		},
+		{
 			Name: "Empty ID",
 			accountMock: account.UseCaseMock{
 				ListBalanceByID: func(uuid.UUID) (int, error) {
 					return 0, nil
 				},
 			},
-			accountID:      uuid.UUID{},
+			accountID:      uuid.Nil.String(),
 			wantStatusCode: http.StatusBadRequest,
-			want:           0,
-		}, {
+		},
+		{
 			Name: "Invalid ID",
 			accountMock: account.UseCaseMock{
 				ListBalanceByID: func(uuid.UUID) (int, error) {
 					return 0, errors.New("Not Found")
 				},
 			},
-			accountID:      uuid.New(),
+			accountID:      uuid.New().String(),
 			wantStatusCode: http.StatusNotFound,
-			want:           0,
+		},
+		{
+			Name: "Invalid accountID format",
+			accountMock: account.UseCaseMock{
+				ListBalanceByID: func(uuid.UUID) (int, error) {
+					return 0, errors.New("invalid accountID format")
+				},
+			},
+			accountID:      "xxxxxxx-xxxx",
+			wantStatusCode: http.StatusBadRequest,
 		},
 	}
 
@@ -210,7 +218,7 @@ func TestShowBalanceHandler(t *testing.T) {
 			r := httptest.NewRequest(http.MethodGet, path, nil)
 
 			vars := map[string]string{
-				"account_id": tt.accountID.String(),
+				"account_id": tt.accountID,
 			}
 
 			r = mux.SetURLVars(r, vars)
