@@ -16,11 +16,11 @@ type Transfer struct {
 	AccountOriginID      string    `json:"account_origin_id"`
 	AccountDestinationID string    `json:"account_destination_id"`
 	Amount               uint      `json:"amount"`
-	Created_At           time.Time `json:"created_at"`
+	CreatedAt            time.Time `json:"created_at"`
 }
 
 //ValidateTransferData, valida as informações na origem de uma transferência
-func ValidateTransferData(transfer *Transfer) error {
+func ValidateTransferData(transfer Transfer) error {
 	if len(transfer.AccountDestinationID) != 36 {
 		return ErrInvalidLengthID
 	}
