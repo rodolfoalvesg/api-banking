@@ -30,7 +30,7 @@ func (c *Controller) CreateTransferHandler(w http.ResponseWriter, r *http.Reques
 	transfer.AccountOriginID = userIDToken
 
 	// ValidateTransferData, valida os dados de entrada
-	err = transfers.ValidateTransferData(&transfer)
+	err = transfers.ValidateTransferData(transfer)
 	if err != nil {
 		responses.RespondError(w, http.StatusPreconditionFailed, err)
 		return
