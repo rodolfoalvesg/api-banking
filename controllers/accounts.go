@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	ErrEmptyID = errors.New("ID cannot be empty")
+	ErrEmptyID       = errors.New("empty uuid")
+	ErrInvalidFormat = errors.New("invalid accountID format")
 )
 
 // CreateAccountHandler, cria uma requisição para criação de conta
@@ -35,7 +36,7 @@ func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request
 
 	err = c.account.VerifyAccount(context.Background(), acc.CPF)
 	if err != nil {
-		responses.RespondError(w, http.StatusBadRequest, err)
+		responses.RespondError(w, http.StatusConflict, err)
 		return
 	}
 
@@ -52,17 +53,19 @@ func (c *Controller) CreateAccountHandler(w http.ResponseWriter, r *http.Request
 // ShowBalanceHandler, cria uma requisição para listar um saldo
 func (c *Controller) ShowBalanceHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	accountID := params["account_id"]
 
-	emptyID := uuid.UUID{}
-	accID := uuid.MustParse(accountID)
+	accountID, err := uuid.Parse(params["account_id"])
+	if err != nil {
+		responses.RespondError(w, http.StatusBadRequest, ErrInvalidFormat)
+		return
+	}
 
-	if accID == emptyID {
+	if accountID == uuid.Nil {
 		responses.RespondError(w, http.StatusBadRequest, ErrEmptyID)
 		return
 	}
 
-	accBalance, err := c.account.ShowBalance(r.Context(), accID)
+	accBalance, err := c.account.ShowBalance(r.Context(), accountID)
 	if err != nil {
 		responses.RespondError(w, http.StatusNotFound, err)
 		return
