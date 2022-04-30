@@ -18,10 +18,24 @@ func TestValidateTransferData(t *testing.T) {
 			Amount:               2500,
 		}
 
-		err := ValidateTransferData(&TestCaseA)
+		err := ValidateTransferData(TestCaseA)
 
 		if err != nil {
 			t.Errorf("got %v, want %v", err, nil)
+		}
+	})
+
+	t.Run("Lengeth", func(t *testing.T) {
+
+		TestCaseA := Transfer{
+			AccountDestinationID: "xxxx-xxxxxxxx",
+			Amount:               2500,
+		}
+
+		err := ValidateTransferData(TestCaseA)
+
+		if !errors.Is(err, ErrInvalidLengthID) {
+			t.Errorf("got %v, want %v", err, ErrInvalidLengthID)
 		}
 	})
 
@@ -31,7 +45,7 @@ func TestValidateTransferData(t *testing.T) {
 			Amount:               0,
 		}
 
-		err := ValidateTransferData(&TestCaseB)
+		err := ValidateTransferData(TestCaseB)
 
 		if !errors.Is(err, ErrInvalidAmount) {
 			t.Errorf("want %v, got %v", ErrInvalidAmount, err)
@@ -46,7 +60,7 @@ func TestValidateTransferData(t *testing.T) {
 			Amount:               2500,
 		}
 
-		err := ValidateTransferData(&TestCaseC)
+		err := ValidateTransferData(TestCaseC)
 
 		if !errors.Is(err, ErrEqualAccounts) {
 			t.Errorf("want %v, got %v", ErrEqualAccounts, err)
