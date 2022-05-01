@@ -124,7 +124,16 @@ Desafio stone em Go para criação de api baking.
         - body:
         ```json
             {
-                "Error": "ID cannot be empty"
+                "Error": "empty uuid"
+            }
+        ```
+     1. Para account_id de formato inválido:
+        - status code: `400`
+        - content-type: `application/json`
+        - body:
+        ```json
+            {
+                "Error": "invalid accountID format"
             }
         ```
      1. Não é encontrada uma conta correspondente:
