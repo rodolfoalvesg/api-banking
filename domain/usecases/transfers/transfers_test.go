@@ -19,7 +19,7 @@ func TestCreateTransfer(t *testing.T) {
 		AccountOriginID:      uuid.New().String(),
 		AccountDestinationID: uuid.New().String(),
 		Amount:               2550,
-		Created_At:           time.Now().UTC(),
+		CreatedAt:            time.Now().UTC(),
 	}
 
 	type TestCase struct {
