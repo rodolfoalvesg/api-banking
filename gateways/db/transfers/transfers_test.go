@@ -29,7 +29,7 @@ func TestSaveTransfer(t *testing.T) {
 				AccountOriginID:      uuid.New().String(),
 				AccountDestinationID: uuid.New().String(),
 				Amount:               25400,
-				Created_At:           time.Now().UTC(),
+				CreatedAt:            time.Now().UTC(),
 			},
 		},
 		{
@@ -38,7 +38,7 @@ func TestSaveTransfer(t *testing.T) {
 				AccountOriginID:      uuid.New().String(),
 				AccountDestinationID: uuid.New().String(),
 				Amount:               25400,
-				Created_At:           time.Now().UTC(),
+				CreatedAt:            time.Now().UTC(),
 			},
 			err: nil,
 		},
