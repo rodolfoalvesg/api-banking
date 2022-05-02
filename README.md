@@ -1,10 +1,11 @@
 # Desafio Técnico - Go(lang) - api-banking 
 Desafio stone em Go para criação de api baking.
 
-<a name="ancora"></a>
+<a id="ancora"></a>
 # Desafio e Instrunções
-- [Desafio Concluído](#ancora1)
-- [Instruções e Regras](#ancora2)
+- [Desafio - Documentação de Rotas](#ancora1)
+- [Dendências e Modo de Uso](#ancora2)
+- [Instruções e Regras](#ancora3)
 
 
 <a id="ancora1"></a>
@@ -121,7 +122,19 @@ Desafio stone em Go para criação de api baking.
      1. Para account_id vazio:
         - status code: `400`
         - content-type: `application/json`
-        - body:
+        - body:Faça o clone deste repositorio, entre na pasta apiTestGolang, crie o arquivo .env na raiz do projeto com as variaveis do .env.example e defina a porta que a aplicação ira rodar e o Access_secret que pode ser uma string de valor qualquer que serve para gerar o token.
+
+Para criar a imagem da aplicação com docker digite no terminal.
+
+docker image build -t apitestegolang .
+
+Para rodar o container na porta 3000:
+
+docker run -it -p 3000:3000 apitestegolang
+
+Se nao tiver o docker instalado, baixe as dependencias com go mod tidy entre na pasta cmd cd cmd e rode a aplicação com go run main.go
+
+
         ```json
             {
                 "Error": "empty uuid"
@@ -341,6 +354,48 @@ Desafio stone em Go para criação de api baking.
 * * * *
 * * * *
 <a id="ancora2"></a>
+# Como Executar e Dependências
+
+## Modo de usar com Docker
+
+- Faça o pull para sua máquina local: 
+```
+    docker pull rodolfo1992/app-banking:1.0
+```
+
+- Para rodar o container:
+```
+    docker run -it -p 8080:3000 app-banking
+```
+
+## Modo de usar sem o Docker
+
+- API baseada na versão: `go version go1.18.1`
+
+- Faça o Clone deste repositório.
+
+- Baixe as dependências:
+```
+    go mod tidy
+```
+
+- Execute a aplicação com:
+```
+    go run main.go
+```
+
+## Dependências necessárias para o funcionamento da API
+
+  - JWT-GO: github.com/golang-jwt/jwt/v4 v4.4.1
+  -	UUID: github.com/google/uuid v1.3.0
+  - Gorilla Mux: github.com/gorilla/mux v1.8.0
+  - BCrypt: github.com/joho/godotenv v1.4.0
+  - GoDoEnv: golang.org/x/crypto v0.0.0-20220321153916-2c7772ba3064
+
+[Topo](#ancora)
+* * * *
+* * * *
+<a id="ancora3"></a>
 
 
 ## Instruções e Regras do Desafio
