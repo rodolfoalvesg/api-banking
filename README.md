@@ -122,19 +122,7 @@ Desafio stone em Go para criação de api baking.
      1. Para account_id vazio:
         - status code: `400`
         - content-type: `application/json`
-        - body:Faça o clone deste repositorio, entre na pasta apiTestGolang, crie o arquivo .env na raiz do projeto com as variaveis do .env.example e defina a porta que a aplicação ira rodar e o Access_secret que pode ser uma string de valor qualquer que serve para gerar o token.
-
-Para criar a imagem da aplicação com docker digite no terminal.
-
-docker image build -t apitestegolang .
-
-Para rodar o container na porta 3000:
-
-docker run -it -p 3000:3000 apitestegolang
-
-Se nao tiver o docker instalado, baixe as dependencias com go mod tidy entre na pasta cmd cd cmd e rode a aplicação com go run main.go
-
-
+        - body:
         ```json
             {
                 "Error": "empty uuid"
